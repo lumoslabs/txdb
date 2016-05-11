@@ -2,7 +2,7 @@ require 'txgh'
 
 module Txdb
   class TxResource
-    RESOURCE_TYPE = 'YAML'
+    RESOURCE_TYPE = 'YML'
 
     class << self
       def from_table(table)
@@ -11,7 +11,7 @@ module Txdb
         new(
           Txgh::TxResource.new(
             project_slug(table), resource_slug(table), RESOURCE_TYPE,
-            source_lang(table), nil, nil, nil
+            source_lang(table), source_file(table), nil, nil
           )
         )
       end
@@ -28,6 +28,10 @@ module Txdb
 
       def source_lang(table)
         table.source_lang
+      end
+
+      def source_file(table)
+        table.name
       end
     end
 

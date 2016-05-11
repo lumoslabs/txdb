@@ -11,7 +11,7 @@ module Txdb
 
     def initialize(options = {})
       @adapter = options.fetch('adapter')
-      @backend = Txgh::Backends.get(options.fetch('backend'))
+      @backend = Txdb::Backends.get(options.fetch('backend'))
       @username = options.fetch('username')
       @password = options.fetch('password')
       @host = options.fetch('host', DEFAULT_HOST)

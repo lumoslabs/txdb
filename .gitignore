@@ -3,4 +3,5 @@ config.yml
 config.production.yml
 .DS_Store
 Gemfile.lock
-
+tester.rb
+migrate.rb

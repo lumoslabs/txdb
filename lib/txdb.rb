@@ -2,9 +2,11 @@ module Txdb
   autoload :Backends,         'txdb/backends'
   autoload :Config,           'txdb/config'
   autoload :Database,         'txdb/database'
+  autoload :Downloader,       'txdb/downloader'
   autoload :Table,            'txdb/table'
   autoload :TransifexProject, 'txdb/transifex_project'
   autoload :TxResource,       'txdb/tx_resource'
+  autoload :Uploader,         'txdb/uploader'
 
   class << self
     def upload

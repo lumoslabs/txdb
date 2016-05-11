@@ -13,7 +13,7 @@ module Txdb
 
       def raw_config
         @raw_config ||= begin
-          scheme, payload = ENV['TXGH_DB_CONFIG'].split('://')
+          scheme, payload = ENV['TXDB_CONFIG'].split('://')
           send(:"load_#{scheme}", payload)
         end
       end

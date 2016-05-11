@@ -18,7 +18,7 @@ module Txdb
     end
 
     def resource
-      @resource ||= Txgh::Db::TxResource.from_table(self)
+      @resource ||= Txdb::TxResource.from_table(self)
     end
 
     def read_content

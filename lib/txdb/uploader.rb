@@ -14,13 +14,14 @@ module Txdb
 
     def upload
       database.tables.each do |table|
-        upload_table(table, database)
+        upload_table(table)
       end
     end
 
     private
 
     def upload_table(table)
+      binding.pry
       transifex_api.create_or_update(
         table.resource, table.read_content
       )
