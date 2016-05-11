@@ -1,0 +1,6 @@
+*.env
+config.yml
+config.production.yml
+.DS_Store
+Gemfile.lock
+
