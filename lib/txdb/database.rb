@@ -33,10 +33,6 @@ module Txdb
       db.from(*args, &block)
     end
 
-    def [](*args, &block)
-      db.send(:[], *args, &block)
-    end
-
     def transifex_api
       transifex_project.api
     end
