@@ -4,7 +4,7 @@ module Txdb
   class Config
     class << self
       def databases
-        @databases ||= raw_config['databases'].map do |database_config|
+        @databases ||= raw_config[:databases].map do |database_config|
           Database.new(database_config)
         end
       end
@@ -19,11 +19,28 @@ module Txdb
       end
 
       def load_file(payload)
-        YAML.load_file(payload)
+        deep_symbolize_keys(YAML.load_file(payload))
       end
 
       def load_raw(payload)
-        YAML.load(payload)
+        deep_symbolize_keys(YAML.load(payload))
+      end
+
+      def deep_symbolize_keys(obj)
+        case obj
+          when Hash
+            obj.each_with_object({}) do |(k, v), ret|
+              ret[k.to_sym] = deep_symbolize_keys(v)
+            end
+
+          when Array
+            obj.map do |elem|
+              deep_symbolize_keys(elem)
+            end
+
+          else
+            obj
+        end
       end
     end
   end

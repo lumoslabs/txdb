@@ -5,3 +5,5 @@ config.production.yml
 Gemfile.lock
 tester.rb
 migrate.rb
+upload.rb
+test.sqlite3

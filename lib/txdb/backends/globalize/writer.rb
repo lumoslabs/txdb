@@ -18,7 +18,9 @@ module Txdb
             row = table.db.where(foreign_key.to_sym => id, locale: locale)
 
             if row.empty?
-              table.db << fields
+              table.db << fields.merge(
+                foreign_key.to_sym => id, locale: locale
+              )
             else
               row.update(fields)
             end

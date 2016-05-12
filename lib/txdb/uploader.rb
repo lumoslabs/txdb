@@ -21,7 +21,6 @@ module Txdb
     private
 
     def upload_table(table)
-      binding.pry
       transifex_api.create_or_update(
         table.resource, table.read_content
       )

@@ -1,6 +1,7 @@
 module Txdb
   autoload :Backends,         'txdb/backends'
   autoload :Config,           'txdb/config'
+  autoload :ConnectionString, 'txdb/connection_string'
   autoload :Database,         'txdb/database'
   autoload :Downloader,       'txdb/downloader'
   autoload :Table,            'txdb/table'

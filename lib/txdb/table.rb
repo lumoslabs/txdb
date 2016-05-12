@@ -8,9 +8,9 @@ module Txdb
 
     def initialize(database, options = {})
       @database = database
-      @name = options.fetch('name')
-      @columns = options.fetch('columns')
-      @source_lang = options.fetch('source_lang')
+      @name = options.fetch(:name)
+      @columns = options.fetch(:columns)
+      @source_lang = options.fetch(:source_lang)
     end
 
     def db
