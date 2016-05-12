@@ -1,9 +1,9 @@
 require 'spec_helper'
-require 'helpers/globalize_db'
+require 'spec_helpers/globalize_db'
 
 include Txdb::Backends
 
-describe Globalize::Reader, globalize: true do
+describe Globalize::Reader, globalize_db: true do
   include_context :globalize
 
   describe '#read_content' do

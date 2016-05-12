@@ -14,7 +14,7 @@ module Txdb
         end
 
         def write_content(content, locale)
-          content[origin_table_name].each_pair do |id, fields|
+          content[origin_table_name(table.name)].each_pair do |id, fields|
             row = table.db.where(foreign_key.to_sym => id, locale: locale)
 
             if row.empty?

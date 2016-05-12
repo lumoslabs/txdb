@@ -1,37 +1,18 @@
-module GlobalizeDb
-  class << self
-    def db
-      @db ||= Sequel.connect("sqlite://#{db_path}")
-    end
+require 'spec_helpers/test_db'
 
+class GlobalizeDb < TestDb
+  class << self
     def database
       @database ||= Txdb::Database.new(
-        adapter: 'sqlite',
-        backend: Txdb::Backends.get('globalize'),
-        username: 'username',
-        password: 'password',
-        database: db_path,
-        transifex: {
-          organization: 'myorg',
-          project_slug: 'myproject',
-          username: 'username',
-          password: 'password'
-        },
-        tables: [{
-          name: 'widget_translations',
-          source_lang: 'en',
-          columns: %w(name)
-        }]
+        raw_config[:databases].first.merge(
+          backend: Txdb::Backends.get('globalize'),
+          tables: [{
+            name: 'widget_translations',
+            source_lang: 'en',
+            columns: %w(name)
+          }]
+        )
       )
-    end
-
-    def db_path
-      File.join(File.dirname(__FILE__), '../test.sqlite3')
-    end
-
-    def reset_db
-      db.tables.each { |t| db.drop_table(t) }
-      setup_db
     end
 
     def setup_db
@@ -72,15 +53,8 @@ RSpec.shared_context(:globalize) do
 end
 
 RSpec.configure do |config|
-  config.before(:all) do
-    GlobalizeDb.reset_db
-  end
-
   config.around(:each) do |example|
-    begin
-      example.run
-    ensure
-      GlobalizeDb.reset_db if example.metadata[:globalize]
-    end
+    GlobalizeDb.reset_db if example.metadata[:globalize_db]
+    example.run
   end
 end

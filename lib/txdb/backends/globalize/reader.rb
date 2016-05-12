@@ -12,7 +12,7 @@ module Txdb
         end
 
         def read_content
-          { origin_table_name => content_for_records }
+          { origin_table_name(table.name) => content_for_records }
         end
 
         private
@@ -41,7 +41,7 @@ module Txdb
 
           loop do
             records = table.db
-              .from(origin_table_name)
+              .from(origin_table_name(table.name))
               .where { id >= counter }
               .order(:id)
               .limit(50)

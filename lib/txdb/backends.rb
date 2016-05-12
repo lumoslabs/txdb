@@ -4,17 +4,15 @@ module Txdb
 
     class << self
       def register(name, klass)
-        backends[name] = klass
+        all[name] = klass
       end
 
       def get(name)
-        backends[name]
+        all[name]
       end
 
-      private
-
-      def backends
-        @backends ||= {}
+      def all
+        @all ||= {}
       end
     end
   end
