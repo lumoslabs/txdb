@@ -14,7 +14,6 @@ Gem::Specification.new do |s|
   s.has_rdoc = true
 
   s.add_dependency 'activesupport', '~> 4.0'
-  s.add_dependency 'mysql2', '~> 0.4'
   s.add_dependency 'sequel', '~> 4.0'
   s.add_dependency 'txgh', '~> 2.0'
 
