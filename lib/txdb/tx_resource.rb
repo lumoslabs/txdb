@@ -23,7 +23,7 @@ module Txdb
       end
 
       def resource_slug(table)
-        Txgh::Utils.slugify(table.name)
+        Txgh::Utils.slugify("#{table.database.database}-#{table.name}")
       end
 
       def source_lang(table)

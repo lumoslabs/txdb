@@ -4,6 +4,8 @@ module Txdb
   autoload :ConnectionString, 'txdb/connection_string'
   autoload :Database,         'txdb/database'
   autoload :Downloader,       'txdb/downloader'
+  autoload :Response,         'txdb/response'
+  autoload :ResponseHelpers,  'txdb/response_helpers'
   autoload :Table,            'txdb/table'
   autoload :TransifexProject, 'txdb/transifex_project'
   autoload :TxResource,       'txdb/tx_resource'

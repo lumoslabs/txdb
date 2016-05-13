@@ -18,12 +18,12 @@ module Txdb
       end
     end
 
-    private
-
     def download_table(table, locale)
       content = transifex_api.download(table.resource, locale)
       table.write_content(content, locale)
     end
+
+    private
 
     def transifex_api
       database.transifex_api

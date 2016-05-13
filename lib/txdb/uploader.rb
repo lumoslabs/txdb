@@ -18,13 +18,13 @@ module Txdb
       end
     end
 
-    private
-
     def upload_table(table)
       transifex_api.create_or_update(
         table.resource, table.read_content
       )
     end
+
+    private
 
     def transifex_api
       database.transifex_api
