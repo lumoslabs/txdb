@@ -28,7 +28,8 @@ class TestDb
             organization: 'myorg',
             project_slug: 'myproject',
             username: 'username',
-            password: 'password'
+            password: 'password',
+            webhook_secret: '123abc'
           },
           tables: [{
             name: 'my_table',

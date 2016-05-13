@@ -19,7 +19,9 @@ describe Uploader, test_db: true do
     it 'reads phrases from the database and uploads them to Transifex' do
       expect(transifex_api).to receive(:create_or_update) do |resource, content|
         expect(resource.project_slug).to eq('myproject')
-        expect(resource.resource_slug).to eq('my_table')
+        expect(resource.resource_slug).to(
+          eq(Txgh::Utils.slugify("#{database.database}-#{database.tables.first.name}"))
+        )
       end
 
       expect { uploader.upload }.to(

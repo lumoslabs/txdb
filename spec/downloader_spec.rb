@@ -19,7 +19,7 @@ describe Downloader, test_db: true do
     it 'downloads translations from Transifex and writes them to the db' do
       expect(transifex_api).to receive(:download) do |resource, locale|
         expect(resource.project_slug).to eq('myproject')
-        expect(resource.resource_slug).to eq('my_table')
+        expect(resource.resource_slug).to eq('spec_test.sqlite3-my_table')
         expect(locale).to eq('es')
         YAML.dump('widgets')
       end

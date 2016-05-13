@@ -20,7 +20,9 @@ describe Table, test_db: true do
       resource = table.resource
       expect(resource).to be_a(Txdb::TxResource)
       expect(resource.project_slug).to eq('myproject')
-      expect(resource.resource_slug).to eq(table.name)
+      expect(resource.resource_slug).to eq(
+        Txgh::Utils.slugify("#{database.database}-#{table.name}")
+      )
       expect(resource.source_file).to eq(table.name)
       expect(resource.source_lang).to eq('en')
     end
