@@ -2,11 +2,15 @@ module Txdb
   module Handlers
     module Triggers
       class Handler
+        include ResponseHelpers
+
         class << self
           def handle_request(request)
             new(request).handle
           end
         end
+
+        attr_reader :request
 
         def initialize(request)
           @request = request

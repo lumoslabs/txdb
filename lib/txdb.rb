@@ -4,6 +4,8 @@ module Txdb
   autoload :ConnectionString, 'txdb/connection_string'
   autoload :Database,         'txdb/database'
   autoload :Downloader,       'txdb/downloader'
+  autoload :Handlers,         'txdb/handlers'
+  autoload :Hooks,            'txdb/app'
   autoload :Response,         'txdb/response'
   autoload :ResponseHelpers,  'txdb/response_helpers'
   autoload :Table,            'txdb/table'
