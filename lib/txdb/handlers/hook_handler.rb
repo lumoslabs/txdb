@@ -5,25 +5,24 @@ module Txdb
   module Handlers
     class HookHandler
       class << self
-        def handle_request(request, project)
-          new(request, project).handle
+        def handle_request(request)
+          new(request).handle
         end
       end
 
       include ResponseHelpers
 
-      attr_reader :request, :project
+      attr_reader :request
 
-      def initialize(request, project)
+      def initialize(request)
         @request = request
-        @project = project
       end
 
       def handle
         locale = payload['language']
 
         tables.each do |table|
-          content = project.api.download(table.resource, locale)
+          content = table.database.transifex_api.download(table.resource, locale)
           table.write_content(content, locale)
         end
 
