@@ -11,6 +11,8 @@ module Txdb
           end
 
           respond_with(200, {})
+        rescue => e
+          respond_with_error(500, "Internal server error: #{e.message}", e)
         end
 
         private

@@ -10,6 +10,7 @@ module Txdb
   autoload :ResponseHelpers,  'txdb/response_helpers'
   autoload :Table,            'txdb/table'
   autoload :TransifexProject, 'txdb/transifex_project'
+  autoload :Triggers,         'txdb/app'
   autoload :TxResource,       'txdb/tx_resource'
   autoload :Uploader,         'txdb/uploader'
 

@@ -2,6 +2,7 @@ require 'spec_helper'
 require 'spec_helpers/test_backend'
 require 'spec_helpers/test_db'
 require 'uri'
+require 'yaml'
 
 include Txdb::Handlers
 
@@ -46,7 +47,9 @@ describe HookHandler do
     it 'downloads and writes new content to the database' do
       expect(project.api).to receive(:download).and_return(YAML.dump(content))
 
-      post '/transifex', body, headers
+      expect { post('/transifex', body, headers) }.to(
+        change { Txdb::TestBackend.writes.size }.from(0).to(1)
+      )
 
       expect(last_response.status).to eq(200)
       expect(last_response.body).to eq('{}')
