@@ -4,15 +4,15 @@ module Txdb
 
       class PullHandler < Handler
         def handle
-          tables.each do |table|
-            locales_for(table).each do |locale|
-              Downloader.new(table.database).download_table(table, locale)
+          handle_safely do
+            tables.each do |table|
+              locales_for(table).each do |locale|
+                Downloader.new(table.database).download_table(table, locale)
+              end
             end
-          end
 
-          respond_with(200, {})
-        rescue => e
-          respond_with_error(500, "Internal server error: #{e.message}", e)
+            respond_with(200, {})
+          end
         end
 
         private

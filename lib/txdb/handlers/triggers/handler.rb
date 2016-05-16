@@ -18,6 +18,12 @@ module Txdb
 
         private
 
+        def handle_safely
+          yield
+        rescue => e
+          respond_with_error(500, "Internal server error: #{e.message}", e)
+        end
+
         def databases
           @databases ||= if database_name = request.params['database']
             Txdb::Config.databases.select do |database|
