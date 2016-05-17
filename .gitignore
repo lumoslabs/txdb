@@ -7,3 +7,4 @@ tester.rb
 migrate.rb
 upload.rb
 test.sqlite3
+pkg/
