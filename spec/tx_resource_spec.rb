@@ -10,6 +10,8 @@ describe TxResource, test_db: true do
 
   it 'proxies methods to the underlying Txgh::TxResource' do
     expect(resource.project_slug).to eq('myproject')
-    expect(resource.resource_slug).to eq(table.name)
+    expect(resource.resource_slug).to(
+      eq(Txgh::Utils.slugify("#{database.database}-#{table.name}"))
+    )
   end
 end

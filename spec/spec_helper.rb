@@ -1,4 +1,5 @@
 require 'pry-byebug'
+require 'rack/test'
 require 'rake'
 require 'rspec'
 require 'sequel'

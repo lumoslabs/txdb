@@ -9,6 +9,11 @@ module Txdb
         end
       end
 
+      def each_table(&block)
+        return to_enum(__method__) unless block_given?
+        databases.each { |database| database.tables.each(&block) }
+      end
+
       private
 
       def raw_config
