@@ -19,8 +19,6 @@ module Txdb
       end
 
       def handle
-        locale = payload['language']
-
         tables.each do |table|
           content = table.database.transifex_api.download(table.resource, locale)
           table.write_content(content, locale)
@@ -32,6 +30,10 @@ module Txdb
       end
 
       private
+
+      def locale
+        payload['language']
+      end
 
       def tables
         @tables ||= Txdb::Config.each_table.select do |table|
