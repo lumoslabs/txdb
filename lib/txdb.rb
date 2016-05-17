@@ -1,4 +1,5 @@
 module Txdb
+  autoload :Application,      'txdb/app'
   autoload :Backends,         'txdb/backends'
   autoload :Config,           'txdb/config'
   autoload :ConnectionString, 'txdb/connection_string'
@@ -14,6 +15,8 @@ module Txdb
   autoload :TxResource,       'txdb/tx_resource'
   autoload :Uploader,         'txdb/uploader'
 
+  DEFAULT_ENV = 'development'
+
   class << self
     def upload
       Txdb::Config.databases.each do |database|
@@ -25,6 +28,10 @@ module Txdb
       Txdb::Config.databases.each do |database|
         Downloader.download(database)
       end
+    end
+
+    def env
+      ENV.fetch('TXDB_ENV', DEFAULT_ENV)
     end
   end
 

@@ -10,6 +10,16 @@ module Txdb
     end
   end
 
+  class Application < Sinatra::Base
+    helpers RespondWith
+
+    get '/health_check' do
+      respond_with(
+        Response.new(200, {})
+      )
+    end
+  end
+
   class Hooks < Sinatra::Base
     include Txdb::Handlers
 

@@ -8,7 +8,8 @@ map '/hooks' do
   run Sinatra::Base
 end
 
-map '/triggers' do
+map '/' do
+  use Txdb::Application
   use Txdb::Triggers
   run Sinatra::Base
 end
