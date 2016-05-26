@@ -13,17 +13,12 @@ module Txdb
           @table = table
         end
 
-        def write_content(content, locale)
-          content[origin_table_name(table.name)].each_pair do |id, fields|
-            row = table.db.where(foreign_key.to_sym => id, locale: locale)
+        def write_content(resource, locale)
+          content = deserialize_content(resource.content)
+          content = content.fetch(origin_table_name(table.name), {})
 
-            if row.empty?
-              table.db << fields.merge(
-                foreign_key.to_sym => id, locale: locale
-              )
-            else
-              row.update(fields)
-            end
+          content.each_pair do |id, fields|
+            update_row(id, fields, locale)
           end
         end
 
