@@ -36,7 +36,7 @@ module Txdb
     private
 
     def process_resource?(resource, table)
-      database.backend.owns_resource?(table, resource.resource_slug)
+      database.backend.owns_resource?(table, resource)
     end
 
     def project_slug
