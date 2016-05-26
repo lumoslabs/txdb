@@ -28,8 +28,12 @@ describe PullHandler do
   it 'downloads the table for each locale' do
     locales = [{ 'language_code' => 'es' }, { 'language_code' => 'ja' }]
     content = { 'phrase' => 'trans' }
+
     expect(database.transifex_api).to receive(:get_languages).and_return(locales)
     allow(database.transifex_api).to receive(:download).and_return(YAML.dump(content))
+    expect(database.transifex_api).to receive(:get_resources).and_return(
+      [Txdb::TestBackend.resource.to_api_h]
+    )
 
     expect { patch('/pull', params) }.to(
       change { Txdb::TestBackend.writes.size }.from(0).to(2)
@@ -38,13 +42,20 @@ describe PullHandler do
     expect(last_response.status).to eq(200)
     expect(last_response.body).to eq('{}')
 
-    expect(Txdb::TestBackend.writes).to include(
-      locale: 'es', table: table.name, content: content
-    )
+    expect(Txdb::TestBackend.writes.first[:locale]).to eq('es')
+    expect(Txdb::TestBackend.writes.last[:locale]).to eq('ja')
 
-    expect(Txdb::TestBackend.writes).to include(
-      locale: 'ja', table: table.name, content: content
-    )
+    Txdb::TestBackend.writes.each do |write|
+      expect(write[:table]).to eq(table.name)
+
+      expect(write[:resource].project_slug).to(
+        eq(Txdb::TestBackend.resource.project_slug)
+      )
+
+      expect(write[:resource].resource_slug).to(
+        eq(Txdb::TestBackend.resource.resource_slug)
+      )
+    end
   end
 
   it 'reports errors' do

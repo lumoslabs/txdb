@@ -5,10 +5,8 @@ module Txdb
       class PullHandler < Handler
         def handle
           handle_safely do
-            tables.each do |table|
-              locales_for(table).each do |locale|
-                Downloader.new(table.database).download_table(table, locale)
-              end
+            locales.each do |locale|
+              downloader.download_table(table, locale)
             end
 
             respond_with(200, {})
@@ -17,15 +15,14 @@ module Txdb
 
         private
 
-        def locales_for(table)
-          locale_cache[table.resource.project_slug] ||=
-            table.database.transifex_api
-              .get_languages(table.resource.project_slug)
-              .map { |locale| locale['language_code'] }
+        def downloader
+          @downloader ||= Downloader.new(database)
         end
 
-        def locale_cache
-          @locale_cache ||= {}
+        def locales
+          database.transifex_api
+            .get_languages(database.transifex_project.project_slug)
+            .map { |locale| locale['language_code'] }
         end
       end
 

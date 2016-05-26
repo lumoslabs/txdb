@@ -18,8 +18,8 @@ describe Uploader, test_db: true do
   describe '#upload' do
     it 'reads phrases from the database and uploads them to Transifex' do
       expect(transifex_api).to receive(:create_or_update) do |resource, content|
-        expect(resource.project_slug).to eq('project_slug')
-        expect(resource.resource_slug).to eq('resource_slug')
+        expect(resource.project_slug).to eq(TestBackend.resource.project_slug)
+        expect(resource.resource_slug).to eq(TestBackend.resource.resource_slug)
       end
 
       expect { uploader.upload }.to(

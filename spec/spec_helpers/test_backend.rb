@@ -30,7 +30,7 @@ module Txdb
 
       def base_resource
         @base_resource ||= Txgh::TxResource.new(
-          'project_slug', 'resource_slug', 'type',
+          'myproject', 'resource_slug', 'type',
           'source_lang', 'source_file', nil, nil
         )
       end

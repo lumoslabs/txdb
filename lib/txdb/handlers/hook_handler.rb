@@ -20,10 +20,10 @@ module Txdb
 
       def handle
         if authentic_request?
-          downloader.download_resource(resource)
+          downloader.download_resource(resource, table, locale)
           respond_with(200, {})
         else
-          respond_with(401, 'Unauthorized')
+          respond_with_error(401, 'Unauthorized')
         end
       rescue => e
         respond_with_error(500, "Internal server error: #{e.message}", e)
@@ -32,23 +32,29 @@ module Txdb
       private
 
       def downloader
-        @downloader ||= Txdb::Downloader.new(table.database)
+        @downloader ||= Txdb::Downloader.new(database)
+      end
+
+      def database
+        @database ||= Txdb::Config.databases.find do |database|
+          database.transifex_project.project_slug == project_slug
+        end
       end
 
       def table
-        @table ||= Txdb::Config.each_table.find do |table|
-          table.database.backend.owns_resource?(table, resource)
+        @table ||= database.tables.find do |table|
+          database.backend.owns_resource?(table, resource)
         end
       end
 
       def resource
-        @resource ||= Txdb::TxResource.from_api_response(
-          transifex_api.get_resource(project_slug, resource_slug)
+        @resource ||= Txgh::TxResource.from_api_response(
+          project_slug, transifex_api.get_resource(project_slug, resource_slug)
         )
       end
 
       def transifex_project
-        table.database.transifex_project
+        database.transifex_project
       end
 
       def authentic_request?
@@ -58,7 +64,7 @@ module Txdb
       end
 
       def transifex_api
-        table.database.transifex_api
+        database.transifex_api
       end
 
       def project_slug
