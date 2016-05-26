@@ -14,6 +14,7 @@ group :test do
   gem 'rspec'
   gem 'sqlite3'
   gem 'rack-test'
+  gem 'timecop'
 end
 
 group :development, :test do
