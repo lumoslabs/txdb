@@ -19,9 +19,11 @@ module Txdb
     end
 
     def upload_table(table)
-      transifex_api.create_or_update(
-        table.resource, table.read_content
-      )
+      table.read_content.each do |resource|
+        transifex_api.create_or_update(
+          resource.original, resource.content
+        )
+      end
     end
 
     private

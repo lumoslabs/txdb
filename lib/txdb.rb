@@ -1,3 +1,5 @@
+require 'ext/txgh/tx_resource'
+
 module Txdb
   autoload :Application,      'txdb/app'
   autoload :Backends,         'txdb/backends'

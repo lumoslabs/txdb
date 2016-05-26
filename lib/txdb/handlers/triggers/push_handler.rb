@@ -5,10 +5,7 @@ module Txdb
       class PushHandler < Handler
         def handle
           handle_safely do
-            tables.each do |table|
-              Uploader.new(table.database).upload_table(table)
-            end
-
+            Uploader.new(database).upload_table(table)
             respond_with(200, {})
           end
         end
