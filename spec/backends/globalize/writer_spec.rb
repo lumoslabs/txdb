@@ -57,8 +57,8 @@ describe Globalize::Writer, globalize_db: true do
           Timecop.freeze(Time.now) do
             @writer.write_content(@resource, 'es')
             translation = widget_translations.first
-            expect(translation[:created_at]).to eq(Time.now.utc)
-            expect(translation[:updated_at]).to eq(Time.now.utc)
+            expect(translation[:created_at].to_i).to eq(Time.now.utc.to_i)
+            expect(translation[:updated_at].to_i).to eq(Time.now.utc.to_i)
           end
         end
 
@@ -69,12 +69,12 @@ describe Globalize::Writer, globalize_db: true do
 
           Timecop.freeze(today) do
             translation = widget_translations.first
-            expect(translation[:updated_at]).to_not eq(today.utc)
+            expect(translation[:updated_at].to_i).to_not eq(today.utc.to_i)
 
             # record already exists, so should get updated with new timestamp
             @writer.write_content(@resource, 'es')
             translation = widget_translations.first
-            expect(translation[:updated_at]).to eq(today.utc)
+            expect(translation[:updated_at].to_i).to eq(today.utc.to_i)
           end
         end
       end
