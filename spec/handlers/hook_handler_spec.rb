@@ -4,6 +4,7 @@ require 'spec_helpers/test_db'
 require 'uri'
 require 'yaml'
 
+include Txdb
 include Txdb::Handlers
 
 describe HookHandler do
@@ -28,10 +29,11 @@ describe HookHandler do
   end
 
   it "doesn't write content when unauthorized" do
-    params = { 'resource' => table.resource.resource_slug, 'language' => 'es' }
+    params = { 'resource' => TestBackend.resource.resource_slug, 'language' => 'es' }
     body = URI.encode_www_form(params.to_a)
     post '/transifex', body
 
+    binding.pry
     expect(last_response.status).to eq(200)
     expect(last_response.body).to eq('{}')
 

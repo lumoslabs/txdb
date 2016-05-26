@@ -19,33 +19,58 @@ module Txdb
       end
 
       def handle
-        tables.each do |table|
-          content = table.database.transifex_api.download(table.resource, locale)
-          table.write_content(content, locale)
+        if authentic_request?
+          downloader.download_resource(resource)
+          respond_with(200, {})
+        else
+          respond_with(401, 'Unauthorized')
         end
-
-        respond_with(200, {})
       rescue => e
         respond_with_error(500, "Internal server error: #{e.message}", e)
       end
 
       private
 
-      def locale
-        payload['language']
+      def downloader
+        @downloader ||= Txdb::Downloader.new(table.database)
       end
 
-      def tables
-        @tables ||= Txdb::Config.each_table.select do |table|
-          table.resource.resource_slug == payload['resource'] &&
-            authentic_request?(table.database.transifex_project)
+      def table
+        @table ||= Txdb::Config.each_table.find do |table|
+          table.database.backend.owns_resource?(table, resource)
         end
       end
 
-      def authentic_request?(project)
-        Txgh::TransifexRequestAuth.authentic_request?(
-          request, project.webhook_secret
+      def resource
+        @resource ||= Txdb::TxResource.from_api_response(
+          transifex_api.get_resource(project_slug, resource_slug)
         )
+      end
+
+      def transifex_project
+        table.database.transifex_project
+      end
+
+      def authentic_request?
+        Txgh::TransifexRequestAuth.authentic_request?(
+          request, transifex_project.webhook_secret
+        )
+      end
+
+      def transifex_api
+        table.database.transifex_api
+      end
+
+      def project_slug
+        payload['project']
+      end
+
+      def resource_slug
+        payload['resource']
+      end
+
+      def locale
+        payload['language']
       end
 
       def payload

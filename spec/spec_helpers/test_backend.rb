@@ -16,12 +16,31 @@ module Txdb
 
       def read_content_from(table)
         reads << { table: table.name }
-        {}
+        [resource]
       end
 
-      def write_content_to(table, content, locale)
-        writes << { table: table.name, content: content, locale: locale }
+      def write_content_to(table, resource, locale)
+        writes << { table: table.name, resource: resource, locale: locale }
         nil
+      end
+
+      def owns_resource?(table, resource)
+        true
+      end
+
+      def base_resource
+        @base_resource ||= Txgh::TxResource.new(
+          'project_slug', 'resource_slug', 'type',
+          'source_lang', 'source_file', nil, nil
+        )
+      end
+
+      def content
+        @content ||= 'fake content'
+      end
+
+      def resource
+        @resource ||= Txdb::TxResource.new(base_resource, content)
       end
     end
   end
