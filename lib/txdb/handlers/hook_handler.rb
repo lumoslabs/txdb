@@ -19,7 +19,7 @@ module Txdb
       end
 
       def handle
-        respond_with_error(401, 'Unauthorized') unless authentic_request?
+        return respond_with_error(401, 'Unauthorized') unless authentic_request?
         downloader.download_resource(resource, table, locale)
         respond_with(200, {})
       rescue => e
