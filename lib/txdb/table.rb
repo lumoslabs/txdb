@@ -1,5 +1,4 @@
 require 'txgh'
-require 'yaml'
 
 module Txdb
   class Table
@@ -17,20 +16,12 @@ module Txdb
       database.db.from(name)
     end
 
-    def resource
-      @resource ||= Txdb::TxResource.from_table(self)
-    end
-
     def read_content
-      YAML.dump(
-        database.backend.read_content_from(self)
-      )
+      database.backend.read_content_from(self)
     end
 
-    def write_content(content, locale)
-      database.backend.write_content_to(
-        self, YAML.load(content), locale
-      )
+    def write_content(resource, locale)
+      database.backend.write_content_to(self, resource, locale)
     end
   end
 end

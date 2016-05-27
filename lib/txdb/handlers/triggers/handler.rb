@@ -24,25 +24,16 @@ module Txdb
           respond_with_error(500, "Internal server error: #{e.message}", e)
         end
 
-        def databases
-          @databases ||= if database_name = request.params['database']
-            Txdb::Config.databases.select do |database|
-              database.database == database_name
-            end
-          else
-            Txdb::Config.databases
+        def database
+          @database ||= Txdb::Config.databases.find do |database|
+            database.database == request.params['database']
           end
         end
 
-        def tables
-          @tables ||= each_table_in(databases).select do |table|
+        def table
+          @table ||= database.tables.find do |table|
             table.name == request.params['table']
           end
-        end
-
-        def each_table_in(databases, &block)
-          return to_enum(__method__, databases) unless block_given?
-          databases.each { |database| database.tables.each(&block) }
         end
       end
     end

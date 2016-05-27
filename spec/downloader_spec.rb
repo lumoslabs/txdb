@@ -5,7 +5,7 @@ require 'spec_helpers/test_backend'
 include Txdb
 
 describe Downloader, test_db: true do
-  let(:database) { Txdb::Config.databases.first }
+  let(:database) { TestDb.database }
   let(:downloader) { Downloader.new(database) }
   let(:transifex_api) { double(:transifex_api) }
 
@@ -17,20 +17,38 @@ describe Downloader, test_db: true do
 
   describe '#download' do
     it 'downloads translations from Transifex and writes them to the db' do
+      expect(transifex_api).to(
+        receive(:get_resources)
+          .with(database.transifex_project.project_slug)
+          .and_return([{
+            'slug' => 'fake_resource_slug',
+            'i18n_type' => 'fake_i18n_type',
+            'source_language_code' => 'en',
+            'name' => 'fake_name',
+          }])
+      )
+
+      content = YAML.dump({ foo: 'bar' })
+
       expect(transifex_api).to receive(:download) do |resource, locale|
         expect(resource.project_slug).to eq('myproject')
-        expect(resource.resource_slug).to eq('spec_test.sqlite3-my_table')
+        expect(resource.resource_slug).to eq('fake_resource_slug')
         expect(locale).to eq('es')
-        YAML.dump('widgets')
+        content
       end
 
       expect { downloader.download('es') }.to(
         change { TestBackend.writes.size }.from(0).to(1)
       )
 
-      expect(TestBackend.writes.first).to eq(
-        table: database.tables.first.name, locale: 'es', content: 'widgets'
-      )
+      write = TestBackend.writes.first
+      expect(write[:table]).to eq(database.tables.first.name)
+      expect(write[:locale]).to eq('es')
+
+      expect(write[:resource]).to be_a(Txdb::TxResource)
+      expect(write[:resource].project_slug).to eq('myproject')
+      expect(write[:resource].resource_slug).to eq('fake_resource_slug')
+      expect(write[:resource].content).to eq(content)
     end
   end
 end

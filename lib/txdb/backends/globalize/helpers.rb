@@ -10,6 +10,10 @@ module Txdb
             table_name.sub(/_translations\z/, '')
           )
         end
+
+        def resource_slug_for(table)
+          Txgh::Utils.slugify("#{table.database.database}-#{table.name}")
+        end
       end
 
       Helpers.extend(Helpers)
