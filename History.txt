@@ -1,7 +1,11 @@
-== 1.0.0
-* Birthday!
+== 1.1.0
+* Support created_at and updated_at fields if they exist (Globalize backend)
+* Support multiple resources per table
 
 == 1.0.1
 * Adding Txgh.env
 * Adding health_check endpoint
+
+== 1.0.0
+* Birthday!
 
