@@ -19,12 +19,9 @@ module Txdb
       end
 
       def handle
-        if authentic_request?
-          downloader.download_resource(resource, table, locale)
-          respond_with(200, {})
-        else
-          respond_with_error(401, 'Unauthorized')
-        end
+        respond_with_error(401, 'Unauthorized') unless authentic_request?
+        downloader.download_resource(resource, table, locale)
+        respond_with(200, {})
       rescue => e
         respond_with_error(500, "Internal server error: #{e.message}", e)
       end
