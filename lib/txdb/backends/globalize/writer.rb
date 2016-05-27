@@ -38,19 +38,13 @@ module Txdb
         end
 
         def created_at
-          if table.db.columns.include?(:created_at)
-            { created_at: get_utc_time }
-          else
-            {}
-          end
+          return {} unless table.db.columns.include?(:created_at)
+          { created_at: get_utc_time }
         end
 
         def updated_at
-          if table.db.columns.include?(:updated_at)
-            { updated_at: get_utc_time }
-          else
-            {}
-          end
+          return {} unless table.db.columns.include?(:updated_at)
+          { updated_at: get_utc_time }
         end
 
         def get_utc_time
