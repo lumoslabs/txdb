@@ -28,12 +28,27 @@ module Txdb
           row = table.db.where(foreign_key.to_sym => id, locale: locale)
 
           if row.empty?
-            table.db << fields.merge(
-              foreign_key.to_sym => id, locale: locale
-            )
+            table.db << fields
+              .merge(foreign_key.to_sym => id, locale: locale)
+              .merge(created_at)
+              .merge(updated_at)
           else
-            row.update(fields)
+            row.update(fields.merge(updated_at))
           end
+        end
+
+        def created_at
+          return {} unless table.db.columns.include?(:created_at)
+          { created_at: get_utc_time }
+        end
+
+        def updated_at
+          return {} unless table.db.columns.include?(:updated_at)
+          { updated_at: get_utc_time }
+        end
+
+        def get_utc_time
+          Time.now.utc
         end
 
         def deserialize_content(content)

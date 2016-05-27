@@ -9,6 +9,8 @@ require 'txdb'
 require 'spec_helpers/env_helpers'
 require 'spec_helpers/test_backend'
 
+Sequel.default_timezone = :utc
+
 RSpec.configure do |config|
   config.before(:each) do
     Txdb::TestBackend.reset
