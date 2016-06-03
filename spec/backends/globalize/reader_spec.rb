@@ -34,5 +34,16 @@ describe Globalize::Reader, globalize_db: true do
         )
       )
     end
+
+    it 'deserializes content correctly' do
+      yaml_file_id = yaml_files.insert(source: YAML.dump(foo: 'bar'))
+      yaml_file_translation_id = yaml_file_translations.insert(
+        yaml_file_id: yaml_file_id, locale: 'es', source: YAML.dump(foo: 'barro')
+      )
+
+      reader = Globalize::Reader.new(yaml_file_translations_table)
+      resources = reader.read_content
+      binding.pry
+    end
   end
 end

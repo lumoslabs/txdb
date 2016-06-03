@@ -34,7 +34,9 @@ class TestDb
           tables: [{
             name: 'my_table',
             source_lang: 'en',
-            columns: %w(my_column)
+            columns: [
+              { name: 'my_column', type: 'string' }
+            ]
           }]
         }]
       })

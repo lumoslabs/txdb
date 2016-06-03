@@ -66,7 +66,7 @@ module Txdb
               unless value.to_s.strip.empty?
                 ret[col.name] = value
               end
-            rescue ColumnDeserializationError
+            rescue ColumnTypes::ColumnDeserializationError
             end
           end
         end

@@ -40,7 +40,7 @@ module Txdb
 
         def serialize_fields(fields)
           fields.each_with_object({}) do |(col_name, value), ret|
-            ret[col_name] = if column = table.find_column(col_name)
+            ret[col_name] = if column = table.find_column(col_name.to_s)
               column.serialize(value)
             else
               value

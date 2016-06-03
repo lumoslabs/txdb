@@ -1,6 +1,6 @@
 module Txdb
   class Column
-    DEFAULT_TYPE = ColumnTypes.get('string')
+    DEFAULT_TYPE = 'string'
 
     attr_reader :name, :type
 
@@ -15,6 +15,8 @@ module Txdb
           @name = options.fetch(:name)
           @type = options.fetch(:type, DEFAULT_TYPE)
       end
+
+      @type = ColumnTypes.get(@type)
     end
 
     def serialize(content)

@@ -10,6 +10,12 @@ class GlobalizeDb < TestDb
             name: 'widget_translations',
             source_lang: 'en',
             columns: %w(name)
+          }, {
+            name: 'yaml_file_translations',
+            source_lang: 'en',
+            columns: [
+              { name: 'source', type: 'yaml' }
+            ]
           }]
         )
       )
@@ -27,6 +33,18 @@ class GlobalizeDb < TestDb
         string :locale
         string :name
       end
+
+      db.create_table(:yaml_files) do
+        primary_key :id
+        string :source
+      end
+
+      db.create_table(:yaml_file_translations) do
+        primary_key :id
+        integer :yaml_file_id
+        string :locale
+        string :source
+      end
     end
 
     def widgets
@@ -37,9 +55,23 @@ class GlobalizeDb < TestDb
       db[:widget_translations]
     end
 
+    def yaml_files
+      db[:yaml_files]
+    end
+
+    def yaml_file_translations
+      db[:yaml_file_translations]
+    end
+
     def widget_translations_table
       database.tables.find do |table|
         table.name == 'widget_translations'
+      end
+    end
+
+    def yaml_file_translations_table
+      database.tables.find do |table|
+        table.name == 'yaml_file_translations'
       end
     end
   end
@@ -49,6 +81,9 @@ RSpec.shared_context(:globalize) do
   let(:widgets) { GlobalizeDb.widgets }
   let(:widget_translations) { GlobalizeDb.widget_translations }
   let(:widget_translations_table) { GlobalizeDb.widget_translations_table }
+  let(:yaml_files) { GlobalizeDb.yaml_files }
+  let(:yaml_file_translations) { GlobalizeDb.yaml_file_translations }
+  let(:yaml_file_translations_table) { GlobalizeDb.yaml_file_translations_table }
   let(:database) { GlobalizeDb.database }
 end
 

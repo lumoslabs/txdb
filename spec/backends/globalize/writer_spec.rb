@@ -19,6 +19,31 @@ describe Globalize::Writer, globalize_db: true do
       )
     end
 
+    it 'serializes columns correctly' do
+      yaml_file_id = yaml_files.insert(source: YAML.dump(foo: 'bar'))
+
+      content = YAML.dump(
+        'yaml_files' => {
+          yaml_file_id => {
+            source: { foo: 'barro' }
+          }
+        }
+      )
+
+      resource = Txdb::TxResource.new(base_resource, content)
+      writer = Globalize::Writer.new(yaml_file_translations_table)
+
+      expect { writer.write_content(resource, 'es') }.to(
+        change { yaml_file_translations.count }.from(0).to(1)
+      )
+
+      translation = yaml_file_translations.first
+
+      expect(translation).to include(
+        locale: 'es', source: "---\n:foo: barro\n", yaml_file_id: yaml_file_id
+      )
+    end
+
     context 'with some content' do
       before(:each) do
         @sprocket_id = widgets.insert(name: 'sprocket')
