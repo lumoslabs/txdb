@@ -43,7 +43,16 @@ describe Globalize::Reader, globalize_db: true do
 
       reader = Globalize::Reader.new(yaml_file_translations_table)
       resources = reader.read_content
-      binding.pry
+      expect(resources.size).to eq(1)
+      resource = resources.first
+
+      expect(resource.content).to eq(
+        YAML.dump(
+          'yaml_files' => {
+            yaml_file_id => { 'source' => { foo: 'bar' } }
+          }
+        )
+      )
     end
   end
 end
