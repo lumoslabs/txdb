@@ -52,16 +52,21 @@ module Txdb
 
         def content_for_records
           each_record.each_with_object({}) do |record, ret|
-            ret[record[:id]] = content_for_record(record)
+            record_content = content_for_record(record)
+            next if record_content.empty?
+            ret[record[:id]] = record_content
           end
         end
 
         def content_for_record(record)
           table.columns.each_with_object({}) do |col, ret|
-            value = record[col.to_sym]
+            begin
+              value = col.deserialize(record[col.name.to_sym])
 
-            unless value.to_s.strip.empty?
-              ret[col] = value
+              unless value.to_s.strip.empty?
+                ret[col.name] = value
+              end
+            rescue ColumnDeserializationError
             end
           end
         end

@@ -8,8 +8,10 @@ module Txdb
     def initialize(database, options = {})
       @database = database
       @name = options.fetch(:name)
-      @columns = options.fetch(:columns)
       @source_lang = options.fetch(:source_lang)
+      @columns = options.fetch(:columns).map do |column_config|
+        Column.new(self, column_config)
+      end
     end
 
     def db
@@ -22,6 +24,10 @@ module Txdb
 
     def write_content(resource, locale)
       database.backend.write_content_to(self, resource, locale)
+    end
+
+    def find_column(name)
+      columns.find { |col| col.name == name }
     end
   end
 end

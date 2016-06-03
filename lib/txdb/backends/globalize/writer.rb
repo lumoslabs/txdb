@@ -25,6 +25,7 @@ module Txdb
         private
 
         def update_row(id, fields, locale)
+          fields = serialize_fields(fields)
           row = table.db.where(foreign_key.to_sym => id, locale: locale)
 
           if row.empty?
@@ -34,6 +35,16 @@ module Txdb
               .merge(updated_at)
           else
             row.update(fields.merge(updated_at))
+          end
+        end
+
+        def serialize_fields(fields)
+          fields.each_with_object({}) do |(col_name, value), ret|
+            ret[col_name] = if column = table.find_column(col_name)
+              column.serialize(value)
+            else
+              value
+            end
           end
         end
 

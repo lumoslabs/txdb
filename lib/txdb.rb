@@ -3,6 +3,8 @@ require 'ext/txgh/tx_resource'
 module Txdb
   autoload :Application,      'txdb/app'
   autoload :Backends,         'txdb/backends'
+  autoload :Column,           'txdb/column'
+  autoload :ColumnTypes,      'txdb/column_types'
   autoload :Config,           'txdb/config'
   autoload :ConnectionString, 'txdb/connection_string'
   autoload :Database,         'txdb/database'
@@ -38,4 +40,7 @@ module Txdb
   end
 
   Txdb::Backends.register('globalize', Txdb::Backends::Globalize::Backend)
+
+  Txdb::ColumnTypes.register('string', Txdb::ColumnTypes::String)
+  Txdb::ColumnTypes.register('yaml', Txdb::ColumnTypes::Yaml)
 end
