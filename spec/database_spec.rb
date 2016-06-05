@@ -4,7 +4,13 @@ require 'spec_helpers/test_db'
 include Txdb
 
 describe Database, test_db: true do
-  let(:database) { TestDb.database }
+  let(:database) do
+    TestDb.setup do
+      create_table(:foo) do
+        primary_key(:id)
+      end
+    end
+  end
 
   describe '#db' do
     it 'provides access to the database connection' do

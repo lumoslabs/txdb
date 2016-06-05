@@ -17,8 +17,15 @@ describe Globalize::Helpers, test_db: true do
   end
 
   describe '#resource_slug_for' do
-    let(:database) { TestDb.database }
-    let(:table) { database.tables.first }
+    let(:database) do
+      TestDb.setup do
+        create_table(:my_table) do
+          primary_key :id
+        end
+      end
+    end
+
+    let(:table) { database.find_table(:my_table) }
 
     it 'constructs a slug from the database and table names' do
       expect(Globalize::Helpers.resource_slug_for(table)).to eq(

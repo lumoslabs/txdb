@@ -5,7 +5,14 @@ require 'spec_helpers/test_backend'
 include Txdb
 
 describe Downloader, test_db: true do
-  let(:database) { TestDb.database }
+  let(:database) do
+    TestDb.setup do
+      create_table(:foo) do
+        primary_key :id
+      end
+    end
+  end
+
   let(:downloader) { Downloader.new(database) }
   let(:transifex_api) { double(:transifex_api) }
 

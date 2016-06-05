@@ -4,66 +4,114 @@ require 'yaml'
 
 class TestDb
   class << self
-    def db
-      @db ||= database.db
-    end
+    def setup(&block)
+      testdb = new.tap do |test_db|
+        test_db.instance_eval(&block)
+      end
 
-    def database
-      @database ||= Txdb::Database.new(raw_config[:databases].first)
-    end
-
-    def db_path
-      File.join(File.dirname(__FILE__), '../test.sqlite3')
-    end
-
-    def raw_config
-      @config ||= deep_freeze({
-        databases: [{
-          adapter: 'sqlite',
-          backend: 'test-backend',
-          username: 'username',
-          password: 'password',
-          database: 'spec/test.sqlite3',
-          transifex: {
-            organization: 'myorg',
-            project_slug: 'myproject',
-            username: 'username',
-            password: 'password',
-            webhook_secret: '123abc'
-          },
-          tables: [{
-            name: 'my_table',
-            source_lang: 'en',
-            columns: %w(my_column)
-          }]
-        }]
-      })
+      databases << testdb.database
+      databases.last
     end
 
     def reset_db
-      db.tables.each { |t| db.drop_table(t) }
-      setup_db
-    end
+      databases.clear
 
-    def setup_db
-      # no-op
-    end
-
-    private
-
-    def deep_freeze(obj)
-      case obj
-        when Hash
-          obj.each_with_object({}) do |(k, v), ret|
-            ret[k] = deep_freeze(v)
-          end.freeze
-
-        when Array
-          obj.map { |elem| deep_freeze(elem) }.freeze
-
-        else
-          obj
+      if File.exist?('spec/test.sqlite3')
+        File.unlink('spec/test.sqlite3')
       end
+    end
+
+    def databases
+      @databases ||= []
+    end
+
+    def base_config
+      {
+        adapter: 'sqlite',
+        backend: 'test-backend',
+        username: 'username',
+        password: 'password',
+        database: 'spec/test.sqlite3',
+        transifex: {
+          organization: 'myorg',
+          project_slug: 'myproject',
+          username: 'username',
+          password: 'password',
+          webhook_secret: '123abc'
+        },
+        tables: []
+      }
+    end
+  end
+
+  attr_reader :database
+
+  def initialize
+    @database = Txdb::Database.new(self.class.base_config)
+  end
+
+  def db
+    database.db
+  end
+
+  def create_table(name, &block)
+    # sequel won't create the table unless it has at least one column
+    db.create_table(name) { integer :remove_me_blarg_blarg }
+    creator = TableCreator.new(name, database, &block)
+    database.tables << creator.table
+    db.alter_table(name) { drop_column :remove_me_blarg_blarg }
+  end
+end
+
+class TableCreator
+  attr_reader :name, :database, :columns, :source_lang
+
+  def initialize(name, database, &block)
+    @name = name
+    @database = database
+    @columns = []
+    @first = true
+    instance_eval(&block)
+  end
+
+  def primary_key(column, *args)
+    db.alter_table(name) { add_primary_key(column, *args) }
+  end
+
+  def string(column, *args)
+    add_column(column, :string, *args)
+  end
+
+  def integer(column, *args)
+    add_column(column, :integer, *args)
+  end
+
+  def source_lang(lang)
+    @source_lang = lang
+  end
+
+  def table
+    Txdb::Table.new(
+      database, {
+        name: name.to_s, columns: columns, source_lang: @source_lang
+      }
+    )
+  end
+
+  private
+
+  def add_column(column, type, *args)
+    columns << column if translate?(args)
+    db.alter_table(name) { add_column(column, type, *args) }
+  end
+
+  def db
+    database.db
+  end
+
+  def translate?(args)
+    args.any? do |arg|
+      arg.is_a?(Hash) && arg[:translate]
     end
   end
 end

@@ -36,5 +36,10 @@ module Txdb
     def transifex_api
       transifex_project.api
     end
+
+    def find_table(name)
+      name = name.to_s
+      tables.find { |table| table.name == name }
+    end
   end
 end

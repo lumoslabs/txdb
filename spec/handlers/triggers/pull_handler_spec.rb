@@ -6,11 +6,18 @@ require 'yaml'
 
 include Txdb::Handlers::Triggers
 
-describe PullHandler do
+describe PullHandler, test_db: true do
   include Rack::Test::Methods
 
-  let(:database) { TestDb.database }
-  let(:table) { database.tables.first }
+  let(:database) do
+    TestDb.setup do
+      create_table(:foo) do
+        primary_key :id
+      end
+    end
+  end
+
+  let(:table) { database.find_table(:foo) }
   let(:project) { database.transifex_project }
 
   def app
