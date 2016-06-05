@@ -61,7 +61,7 @@ module Txdb
             value = record[col.to_sym]
 
             unless value.to_s.strip.empty?
-              ret[col] = value
+              ret[col.to_s] = value
             end
           end
         end
