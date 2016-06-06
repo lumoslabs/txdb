@@ -3,6 +3,36 @@ require 'spec_helpers/test_backend'
 require 'yaml'
 
 module Txdb
+  # The test configurator is responsible for creating test databases and tables.
+  # It creates actual SQLite tables and the corresponding Table and Database
+  # config objects that are usually constructed from config.yml. The SQLite
+  # database is deleted and old instances of TestConfigurator are released to
+  # the garbage collector before each test run. Set the test_config: true tag on
+  # your top-level RSpec describe blocks to activate this cleanup behavior.
+  #
+  # Example:
+  #
+  # describe MyClass, test_config: true do
+  #   let(:database) do
+  #     TestConfigurator.setup do
+  #       create_table :my_table do
+  #         primary_key :id
+  #         string :name, translate: true
+  #       end
+  #     end
+  #   end
+  # end
+  #
+  # Any field marked with translate: true will be added to the list of columns
+  # to translate in the corresponding Table object.
+  #
+  # TestConfigurator.setup returns an instance of Database, which can be used
+  # anywhere a Database instance is required. For example, you can use the
+  # return value to create a downloader:
+  #
+  # it 'downloads some stuff' do
+  #   Txdb::Downloader.new(database).download('ko')
+  # end
   class TestConfigurator
     class << self
       def setup(&block)

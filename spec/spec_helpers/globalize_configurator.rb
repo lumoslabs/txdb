@@ -1,6 +1,8 @@
 require 'spec_helpers/test_configurator'
 
 module Txdb
+  # The globalize configurator uses the functionality in the test configurator
+  # to create a couple of test tables for testing globalize-specific scenarios.
   class GlobalizeConfigurator < TestConfigurator
     class << self
       def setup(&block)
