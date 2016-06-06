@@ -6,7 +6,7 @@ include Txdb
 
 describe Table, test_db: true do
   let(:database) do
-    TestDb.setup do
+    TestConfigurator.setup do
       create_table(:my_table) do
         primary_key :id
       end

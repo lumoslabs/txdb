@@ -6,7 +6,7 @@ include Txdb
 
 describe Uploader, test_db: true do
   let(:database) do
-    TestDb.setup do
+    TestConfigurator.setup do
       create_table(:foo) do
         primary_key :id
       end

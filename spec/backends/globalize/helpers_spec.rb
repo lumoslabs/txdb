@@ -18,7 +18,7 @@ describe Globalize::Helpers, test_db: true do
 
   describe '#resource_slug_for' do
     let(:database) do
-      TestDb.setup do
+      TestConfigurator.setup do
         create_table(:my_table) do
           primary_key :id
         end

@@ -5,7 +5,7 @@ include Txdb
 
 describe TransifexProject, test_db: true do
   let(:database) do
-    TestDb.setup
+    TestConfigurator.setup
   end
 
   let(:project) { database.transifex_project }

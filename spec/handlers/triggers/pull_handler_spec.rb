@@ -10,7 +10,7 @@ describe PullHandler, test_db: true do
   include Rack::Test::Methods
 
   let(:database) do
-    TestDb.setup do
+    TestConfigurator.setup do
       create_table(:foo) do
         primary_key :id
       end

@@ -1,7 +1,7 @@
 require 'spec_helpers/test_db'
 
 module Txdb
-  class GlobalizeDb < TestDb
+  class GlobalizeConfigurator < TestConfigurator
     class << self
       def setup(&block)
         super do
@@ -26,14 +26,14 @@ module Txdb
 end
 
 RSpec.shared_context(:globalize) do
-  let(:database) { GlobalizeDb.setup }
+  let(:database) { GlobalizeConfigurator.setup }
   let(:widgets) { database.find_table(:widgets) }
   let(:widget_translations) { database.find_table(:widget_translations) }
 end
 
 RSpec.configure do |config|
   config.around(:each) do |example|
-    GlobalizeDb.reset_db if example.metadata[:globalize_db]
+    GlobalizeConfigurator.reset_db if example.metadata[:globalize_db]
     example.run
   end
 end

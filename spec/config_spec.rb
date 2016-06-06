@@ -13,7 +13,7 @@ describe Txdb::Config do
   let(:config) do
     {
       databases: [
-        TestDb.base_config.tap do |base_config|
+        TestConfigurator.base_config.tap do |base_config|
           base_config[:tables] << {
             name: 'my_table',
             source_lang: 'en',

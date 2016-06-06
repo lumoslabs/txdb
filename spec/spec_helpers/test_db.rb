@@ -3,7 +3,7 @@ require 'spec_helpers/test_backend'
 require 'yaml'
 
 module Txdb
-  class TestDb
+  class TestConfigurator
     class << self
       def setup(&block)
         testdb = new.tap do |test_db|
@@ -120,7 +120,7 @@ end
 
 RSpec.configure do |config|
   config.around(:each) do |example|
-    TestDb.reset_db if example.metadata[:test_db]
+    TestConfigurator.reset_db if example.metadata[:test_db]
     example.run
   end
 end

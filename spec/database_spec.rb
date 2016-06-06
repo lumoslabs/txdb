@@ -5,7 +5,7 @@ include Txdb
 
 describe Database, test_db: true do
   let(:database) do
-    TestDb.setup
+    TestConfigurator.setup
   end
 
   describe '#db' do
