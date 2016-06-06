@@ -9,10 +9,10 @@ describe Globalize::Reader, globalize_db: true do
 
   describe '#read_content' do
     it 'reads data from the given table and returns an array of resources' do
-      sprocket_id = widgets.db.insert(name: 'sprocket')
-      flange_id = widgets.db.insert(name: 'flange')
-      widget_translations.db.insert(widget_id: sprocket_id, locale: 'es', name: 'sproqueta')
-      widget_translations.db.insert(widget_id: flange_id, locale: 'es', name: 'flango')
+      sprocket_id = widgets.connection.insert(name: 'sprocket')
+      flange_id = widgets.connection.insert(name: 'flange')
+      widget_translations.connection.insert(widget_id: sprocket_id, locale: 'es', name: 'sproqueta')
+      widget_translations.connection.insert(widget_id: flange_id, locale: 'es', name: 'flango')
 
       reader = Globalize::Reader.new(widget_translations)
       resources = reader.read_content

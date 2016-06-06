@@ -1,23 +1,25 @@
 require 'spec_helpers/test_db'
 
-class GlobalizeDb < TestDb
-  class << self
-    def setup(&block)
-      super do
-        create_table(:widgets) do
-          primary_key :id
-          string :name
-        end
+module Txdb
+  class GlobalizeDb < TestDb
+    class << self
+      def setup(&block)
+        super do
+          create_table(:widgets) do
+            primary_key :id
+            string :name
+          end
 
-        create_table(:widget_translations) do
-          primary_key :id
-          integer :widget_id
-          string :locale
-          string :name, translate: true
-          source_lang 'en'
-        end
+          create_table(:widget_translations) do
+            primary_key :id
+            integer :widget_id
+            string :locale
+            string :name, translate: true
+            source_lang 'en'
+          end
 
-        block.call if block
+          block.call if block
+        end
       end
     end
   end

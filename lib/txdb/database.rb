@@ -25,12 +25,12 @@ module Txdb
       end
     end
 
-    def db
-      @db ||= Sequel.connect(connection_string, max_connections: pool)
+    def connection
+      @connection ||= Sequel.connect(connection_string, max_connections: pool)
     end
 
     def from(*args, &block)
-      db.from(*args, &block)
+      connection.from(*args, &block)
     end
 
     def transifex_api

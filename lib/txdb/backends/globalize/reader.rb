@@ -73,7 +73,7 @@ module Txdb
           last_id = nil
 
           loop do
-            records = table.db
+            records = table.connection
               .from(origin_table_name(table.name))
               .where { id >= counter }
               .order(:id)

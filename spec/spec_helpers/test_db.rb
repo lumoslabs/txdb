@@ -2,116 +2,118 @@ require 'spec_helpers/env_helpers'
 require 'spec_helpers/test_backend'
 require 'yaml'
 
-class TestDb
-  class << self
-    def setup(&block)
-      testdb = new.tap do |test_db|
-        test_db.instance_eval(&block)
+module Txdb
+  class TestDb
+    class << self
+      def setup(&block)
+        testdb = new.tap do |test_db|
+          test_db.instance_eval(&block) if block
+        end
+
+        databases << testdb.database
+        databases.last
       end
 
-      databases << testdb.database
-      databases.last
-    end
+      def reset_db
+        databases.clear
 
-    def reset_db
-      databases.clear
-
-      if File.exist?('spec/test.sqlite3')
-        File.unlink('spec/test.sqlite3')
+        if File.exist?('spec/test.sqlite3')
+          File.unlink('spec/test.sqlite3')
+        end
       end
-    end
 
-    def databases
-      @databases ||= []
-    end
+      def databases
+        @databases ||= []
+      end
 
-    def base_config
-      {
-        adapter: 'sqlite',
-        backend: 'test-backend',
-        username: 'username',
-        password: 'password',
-        database: 'spec/test.sqlite3',
-        transifex: {
-          organization: 'myorg',
-          project_slug: 'myproject',
+      def base_config
+        {
+          adapter: 'sqlite',
+          backend: 'test-backend',
           username: 'username',
           password: 'password',
-          webhook_secret: '123abc'
-        },
-        tables: []
-      }
+          database: 'spec/test.sqlite3',
+          transifex: {
+            organization: 'myorg',
+            project_slug: 'myproject',
+            username: 'username',
+            password: 'password',
+            webhook_secret: '123abc'
+          },
+          tables: []
+        }
+      end
+    end
+
+    attr_reader :database
+
+    def initialize
+      @database = Txdb::Database.new(self.class.base_config)
+    end
+
+    def connection
+      database.connection
+    end
+
+    def create_table(name, &block)
+      # sequel won't create the table unless it has at least one column
+      connection.create_table(name) { integer :remove_me_blarg_blarg }
+      creator = TableCreator.new(name, database, &block)
+      database.tables << creator.table
+      connection.alter_table(name) { drop_column :remove_me_blarg_blarg }
     end
   end
 
-  attr_reader :database
+  class TableCreator
+    attr_reader :name, :database, :columns, :source_lang
 
-  def initialize
-    @database = Txdb::Database.new(self.class.base_config)
-  end
+    def initialize(name, database, &block)
+      @name = name
+      @database = database
+      @columns = []
+      @first = true
+      instance_eval(&block)
+    end
 
-  def db
-    database.db
-  end
+    def primary_key(column, *args)
+      connection.alter_table(name) { add_primary_key(column, *args) }
+    end
 
-  def create_table(name, &block)
-    # sequel won't create the table unless it has at least one column
-    db.create_table(name) { integer :remove_me_blarg_blarg }
-    creator = TableCreator.new(name, database, &block)
-    database.tables << creator.table
-    db.alter_table(name) { drop_column :remove_me_blarg_blarg }
-  end
-end
+    def string(column, *args)
+      add_column(column, :string, *args)
+    end
 
-class TableCreator
-  attr_reader :name, :database, :columns, :source_lang
+    def integer(column, *args)
+      add_column(column, :integer, *args)
+    end
 
-  def initialize(name, database, &block)
-    @name = name
-    @database = database
-    @columns = []
-    @first = true
-    instance_eval(&block)
-  end
+    def source_lang(lang)
+      @source_lang = lang
+    end
 
-  def primary_key(column, *args)
-    db.alter_table(name) { add_primary_key(column, *args) }
-  end
+    def table
+      Txdb::Table.new(
+        database, {
+          name: name.to_s, columns: columns, source_lang: @source_lang
+        }
+      )
+    end
 
-  def string(column, *args)
-    add_column(column, :string, *args)
-  end
+    private
 
-  def integer(column, *args)
-    add_column(column, :integer, *args)
-  end
+    def add_column(column, type, *args)
+      columns << column if translate?(args)
+      connection.alter_table(name) { add_column(column, type, *args) }
+    end
 
-  def source_lang(lang)
-    @source_lang = lang
-  end
+    def connection
+      database.connection
+    end
 
-  def table
-    Txdb::Table.new(
-      database, {
-        name: name.to_s, columns: columns, source_lang: @source_lang
-      }
-    )
-  end
-
-  private
-
-  def add_column(column, type, *args)
-    columns << column if translate?(args)
-    db.alter_table(name) { add_column(column, type, *args) }
-  end
-
-  def db
-    database.db
-  end
-
-  def translate?(args)
-    args.any? do |arg|
-      arg.is_a?(Hash) && arg[:translate]
+    def translate?(args)
+      args.any? do |arg|
+        arg.is_a?(Hash) && arg[:translate]
+      end
     end
   end
 end
