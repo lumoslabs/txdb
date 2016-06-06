@@ -41,6 +41,16 @@ module Txdb
 
       alias_method :each_record, :each
 
+      def compact_map
+        return to_enum(__method__) unless block_given?
+
+        each_with_object([]) do |elem, ret|
+          if val = yield(elem)
+            ret << val
+          end
+        end
+      end
+
       private
 
       def table_name
