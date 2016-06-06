@@ -1,11 +1,11 @@
 require 'spec_helper'
-require 'spec_helpers/test_db'
+require 'spec_helpers/test_configurator'
 
 include Txdb::Iterators
 
-describe GlobalizeIterator, test_db: true do
+describe GlobalizeIterator, test_config: true do
   let(:database) do
-    TestDb.setup do
+    TestConfigurator.setup do
       create_table(:teams) do
         primary_key :id
         string :name
@@ -30,8 +30,8 @@ describe GlobalizeIterator, test_db: true do
 
   it 'iterates over the items in the parent table' do
     teams.each do |team|
-      teams_table.db << { name: team }
-      team_translations_table.db << { name: "#{team}-es", locale: 'es' }
+      teams_table.connection << { name: team }
+      team_translations_table.connection << { name: "#{team}-es", locale: 'es' }
     end
 
     entries = iterator.map { |entry| entry[:name] }

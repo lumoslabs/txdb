@@ -1,11 +1,11 @@
 require 'spec_helper'
-require 'spec_helpers/test_db'
+require 'spec_helpers/test_configurator'
 
 include Txdb::Iterators
 
-describe AutoIncrementIterator, test_db: true do
+describe AutoIncrementIterator, test_config: true do
   let(:database) do
-    TestDb.setup do
+    TestConfigurator.setup do
       create_table(:teams) do
         primary_key :id
         string :name, translate: true
@@ -23,7 +23,7 @@ describe AutoIncrementIterator, test_db: true do
 
   it 'iterates sequentially over every database entry' do
     entries = teams.map { |team| { name: team } }
-    entries.each { |entry| table.db << entry }
+    entries.each { |entry| table.connection << entry }
 
     iterator.each do |db_entry|
       entries.delete_if { |entry| db_entry[:name] == entry[:name] }

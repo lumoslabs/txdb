@@ -22,7 +22,7 @@ module Txdb
         sql_column = Sequel.expr(column)
 
         loop do
-          records = table.db
+          records = table.connection
             .from(table_name)
             .where { sql_column >= counter }
             .order(column)
