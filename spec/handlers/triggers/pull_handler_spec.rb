@@ -6,7 +6,7 @@ require 'yaml'
 
 include Txdb::Handlers::Triggers
 
-describe PullHandler, test_db: true do
+describe PullHandler, test_config: true do
   include Rack::Test::Methods
 
   let(:database) do

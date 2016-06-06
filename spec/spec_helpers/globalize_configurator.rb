@@ -33,7 +33,7 @@ end
 
 RSpec.configure do |config|
   config.around(:each) do |example|
-    Txdb::GlobalizeConfigurator.reset_db if example.metadata[:globalize_db]
+    Txdb::GlobalizeConfigurator.reset_db if example.metadata[:globalize_config]
     example.run
   end
 end

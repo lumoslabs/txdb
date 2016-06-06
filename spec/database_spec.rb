@@ -3,7 +3,7 @@ require 'spec_helpers/test_configurator'
 
 include Txdb
 
-describe Database, test_db: true do
+describe Database, test_config: true do
   let(:database) do
     TestConfigurator.setup
   end

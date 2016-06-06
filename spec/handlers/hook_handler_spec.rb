@@ -7,7 +7,7 @@ require 'yaml'
 include Txdb
 include Txdb::Handlers
 
-describe HookHandler, test_db: true do
+describe HookHandler, test_config: true do
   include Rack::Test::Methods
 
   let(:database) do

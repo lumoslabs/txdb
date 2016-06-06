@@ -120,7 +120,7 @@ end
 
 RSpec.configure do |config|
   config.around(:each) do |example|
-    Txdb::TestConfigurator.reset_db if example.metadata[:test_db]
+    Txdb::TestConfigurator.reset_db if example.metadata[:test_config]
     example.run
   end
 end

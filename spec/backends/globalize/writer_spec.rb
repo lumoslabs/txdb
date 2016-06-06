@@ -6,7 +6,7 @@ require 'yaml'
 
 include Txdb::Backends
 
-describe Globalize::Writer, globalize_db: true do
+describe Globalize::Writer, globalize_config: true do
   include_context :globalize
 
   describe '#write_content' do

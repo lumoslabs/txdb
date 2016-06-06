@@ -3,7 +3,7 @@ require 'spec_helpers/test_configurator'
 
 include Txdb::Backends
 
-describe Globalize::Helpers, test_db: true do
+describe Globalize::Helpers, test_config: true do
   describe '.origin_table_name' do
     it 'pluralizes and removes the translations suffix' do
       origin = Globalize::Helpers.origin_table_name('widget_translations')

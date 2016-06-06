@@ -4,7 +4,7 @@ require 'yaml'
 
 include Txdb
 
-describe Table, test_db: true do
+describe Table, test_config: true do
   let(:database) do
     TestConfigurator.setup do
       create_table(:my_table) do

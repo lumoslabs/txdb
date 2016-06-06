@@ -4,7 +4,7 @@ require 'yaml'
 
 include Txdb::Backends
 
-describe Globalize::Reader, globalize_db: true do
+describe Globalize::Reader, globalize_config: true do
   include_context :globalize
 
   describe '#read_content' do
