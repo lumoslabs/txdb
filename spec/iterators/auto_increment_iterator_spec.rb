@@ -5,7 +5,7 @@ include Txdb::Iterators
 
 describe AutoIncrementIterator, test_config: true do
   let(:database) do
-    TestConfigurator.setup do
+    Txdb::TestConfigurator.setup do
       create_table(:teams) do
         primary_key :id
         string :name, translate: true
