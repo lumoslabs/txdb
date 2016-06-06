@@ -1,12 +1,12 @@
 require 'spec_helper'
-require 'spec_helpers/test_db'
+require 'spec_helpers/test_configurator'
 require 'spec_helpers/test_backend'
 
 include Txdb
 
-describe Uploader, test_db: true do
+describe Uploader, test_config: true do
   let(:database) do
-    TestDb.setup do
+    TestConfigurator.setup do
       create_table(:foo) do
         primary_key :id
       end

@@ -1,12 +1,12 @@
 require 'spec_helper'
-require 'spec_helpers/test_db'
+require 'spec_helpers/test_configurator'
 require 'yaml'
 
 include Txdb
 
-describe Table, test_db: true do
+describe Table, test_config: true do
   let(:database) do
-    TestDb.setup do
+    TestConfigurator.setup do
       create_table(:my_table) do
         primary_key :id
       end
@@ -15,10 +15,10 @@ describe Table, test_db: true do
 
   let(:table) { database.find_table(:my_table) }
 
-  describe '#db' do
+  describe '#connection' do
     it 'returns a dataset primed to select from the table' do
-      expect(table.db).to be_a(Sequel::Dataset)
-      expect(table.db.sql).to eq('SELECT * FROM `my_table`')
+      expect(table.connection).to be_a(Sequel::Dataset)
+      expect(table.connection.sql).to eq('SELECT * FROM `my_table`')
     end
   end
 

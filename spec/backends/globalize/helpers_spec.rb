@@ -1,9 +1,9 @@
 require 'spec_helper'
-require 'spec_helpers/test_db'
+require 'spec_helpers/test_configurator'
 
 include Txdb::Backends
 
-describe Globalize::Helpers, test_db: true do
+describe Globalize::Helpers, test_config: true do
   describe '.origin_table_name' do
     it 'pluralizes and removes the translations suffix' do
       origin = Globalize::Helpers.origin_table_name('widget_translations')
@@ -18,7 +18,7 @@ describe Globalize::Helpers, test_db: true do
 
   describe '#resource_slug_for' do
     let(:database) do
-      TestDb.setup do
+      Txdb::TestConfigurator.setup do
         create_table(:my_table) do
           primary_key :id
         end

@@ -1,17 +1,17 @@
 require 'spec_helper'
 require 'spec_helpers/test_backend'
-require 'spec_helpers/test_db'
+require 'spec_helpers/test_configurator'
 require 'uri'
 require 'yaml'
 
 include Txdb
 include Txdb::Handlers
 
-describe HookHandler, test_db: true do
+describe HookHandler, test_config: true do
   include Rack::Test::Methods
 
   let(:database) do
-    TestDb.setup do
+    TestConfigurator.setup do
       create_table(:foo) do
         primary_key :id
       end

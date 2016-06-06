@@ -12,8 +12,8 @@ module Txdb
       @source_lang = options.fetch(:source_lang)
     end
 
-    def db
-      database.db.from(name)
+    def connection
+      database.connection.from(name)
     end
 
     def read_content

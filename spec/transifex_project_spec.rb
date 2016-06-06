@@ -1,15 +1,11 @@
 require 'spec_helper'
-require 'spec_helpers/test_db'
+require 'spec_helpers/test_configurator'
 
 include Txdb
 
-describe TransifexProject, test_db: true do
+describe TransifexProject, test_config: true do
   let(:database) do
-    TestDb.setup do
-      create_table(:foo) do
-        primary_key :id
-      end
-    end
+    TestConfigurator.setup
   end
 
   let(:project) { database.transifex_project }
