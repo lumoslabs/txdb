@@ -6,11 +6,11 @@ module Txdb
   class TestConfigurator
     class << self
       def setup(&block)
-        testdb = new.tap do |test_db|
-          test_db.instance_eval(&block) if block
+        test_config = new.tap do |test_config|
+          test_config.instance_eval(&block) if block
         end
 
-        databases << testdb.database
+        databases << test_config.database
         databases.last
       end
 
@@ -120,7 +120,7 @@ end
 
 RSpec.configure do |config|
   config.around(:each) do |example|
-    TestConfigurator.reset_db if example.metadata[:test_db]
+    Txdb::TestConfigurator.reset_db if example.metadata[:test_db]
     example.run
   end
 end

@@ -1,6 +1,6 @@
 require 'spec_helper'
 require 'spec_helpers/test_backend'
-require 'spec_helpers/test_db'
+require 'spec_helpers/test_configurator'
 require 'uri'
 require 'yaml'
 

@@ -1,5 +1,5 @@
 require 'spec_helper'
-require 'spec_helpers/test_db'
+require 'spec_helpers/test_configurator'
 require 'yaml'
 
 include Txdb

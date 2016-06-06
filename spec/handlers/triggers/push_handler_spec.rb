@@ -1,6 +1,6 @@
 require 'spec_helper'
 require 'spec_helpers/test_backend'
-require 'spec_helpers/test_db'
+require 'spec_helpers/test_configurator'
 require 'uri'
 require 'yaml'
 
@@ -10,7 +10,7 @@ describe PushHandler, test_db: true do
   include Rack::Test::Methods
 
   let(:database) do
-    TestConfigurator.setup do
+    Txdb::TestConfigurator.setup do
       create_table(:foo) do
         primary_key :id
       end

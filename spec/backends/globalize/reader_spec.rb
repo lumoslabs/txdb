@@ -1,5 +1,5 @@
 require 'spec_helper'
-require 'spec_helpers/globalize_db'
+require 'spec_helpers/globalize_configurator'
 require 'yaml'
 
 include Txdb::Backends

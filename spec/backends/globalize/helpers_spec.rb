@@ -1,5 +1,5 @@
 require 'spec_helper'
-require 'spec_helpers/test_db'
+require 'spec_helpers/test_configurator'
 
 include Txdb::Backends
 
@@ -18,7 +18,7 @@ describe Globalize::Helpers, test_db: true do
 
   describe '#resource_slug_for' do
     let(:database) do
-      TestConfigurator.setup do
+      Txdb::TestConfigurator.setup do
         create_table(:my_table) do
           primary_key :id
         end

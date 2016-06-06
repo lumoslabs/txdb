@@ -1,6 +1,6 @@
 require 'active_support/core_ext/numeric/time'
 require 'spec_helper'
-require 'spec_helpers/globalize_db'
+require 'spec_helpers/globalize_configurator'
 require 'timecop'
 require 'yaml'
 

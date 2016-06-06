@@ -1,5 +1,5 @@
 require 'spec_helper'
-require 'spec_helpers/test_db'
+require 'spec_helpers/test_configurator'
 require 'tempfile'
 require 'yaml'
 
@@ -13,7 +13,7 @@ describe Txdb::Config do
   let(:config) do
     {
       databases: [
-        TestConfigurator.base_config.tap do |base_config|
+        Txdb::TestConfigurator.base_config.tap do |base_config|
           base_config[:tables] << {
             name: 'my_table',
             source_lang: 'en',
