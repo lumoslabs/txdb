@@ -51,7 +51,7 @@ module Txdb
         end
 
         def content_for_records
-          each_record.each_with_object({}) do |record, ret|
+          iterator.each_with_object({}) do |record, ret|
             ret[record[:id]] = content_for_record(record)
           end
         end
@@ -66,28 +66,8 @@ module Txdb
           end
         end
 
-        def each_record
-          return to_enum(__method__) unless block_given?
-
-          counter = 0
-          last_id = nil
-
-          loop do
-            records = table.connection
-              .from(origin_table_name(table.name))
-              .where { id >= counter }
-              .order(:id)
-              .limit(50)
-
-            break if records.count == 0
-
-            records.each do |record|
-              yield record
-              last_id = record[:id]
-            end
-
-            counter = last_id + 1
-          end
+        def iterator
+          @iterator ||= Iterators::GlobalizeIterator.new(table)
         end
       end
 

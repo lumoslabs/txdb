@@ -9,6 +9,7 @@ module Txdb
   autoload :Downloader,       'txdb/downloader'
   autoload :Handlers,         'txdb/handlers'
   autoload :Hooks,            'txdb/app'
+  autoload :Iterators,        'txdb/iterators'
   autoload :Response,         'txdb/response'
   autoload :ResponseHelpers,  'txdb/response_helpers'
   autoload :Table,            'txdb/table'

@@ -3,8 +3,8 @@ require 'txgh'
 module Txdb
   class Downloader
     class << self
-      def download(database)
-        new(database).download
+      def download(database, locale)
+        new(database).download(locale)
       end
     end
 
