@@ -1,18 +1,20 @@
 require 'spec_helper'
-require 'spec_helpers/test_db'
+require 'spec_helpers/test_configurator'
 
 include Txdb
 
-describe Database, test_db: true do
-  let(:database) { TestDb.database }
+describe Database, test_config: true do
+  let(:database) do
+    TestConfigurator.setup
+  end
 
   describe '#db' do
     it 'provides access to the database connection' do
-      expect(database.db).to be_a(Sequel::SQLite::Database)
+      expect(database.connection).to be_a(Sequel::SQLite::Database)
     end
 
     it 'sets the max number of connections as specified in the config' do
-      expect(database.db.pool.max_size).to eq(database.pool)
+      expect(database.connection.pool.max_size).to eq(database.pool)
     end
   end
 

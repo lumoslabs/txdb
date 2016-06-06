@@ -1,11 +1,18 @@
 require 'spec_helper'
-require 'spec_helpers/test_db'
+require 'spec_helpers/test_configurator'
 require 'spec_helpers/test_backend'
 
 include Txdb
 
-describe Downloader, test_db: true do
-  let(:database) { TestDb.database }
+describe Downloader, test_config: true do
+  let(:database) do
+    TestConfigurator.setup do
+      create_table(:foo) do
+        primary_key :id
+      end
+    end
+  end
+
   let(:downloader) { Downloader.new(database) }
   let(:transifex_api) { double(:transifex_api) }
 

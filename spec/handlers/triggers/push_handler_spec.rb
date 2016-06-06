@@ -1,16 +1,23 @@
 require 'spec_helper'
 require 'spec_helpers/test_backend'
-require 'spec_helpers/test_db'
+require 'spec_helpers/test_configurator'
 require 'uri'
 require 'yaml'
 
 include Txdb::Handlers::Triggers
 
-describe PushHandler do
+describe PushHandler, test_config: true do
   include Rack::Test::Methods
 
-  let(:database) { TestDb.database }
-  let(:table) { database.tables.first }
+  let(:database) do
+    Txdb::TestConfigurator.setup do
+      create_table(:foo) do
+        primary_key :id
+      end
+    end
+  end
+
+  let(:table) { database.find_table(:foo) }
   let(:project) { database.transifex_project }
 
   def app

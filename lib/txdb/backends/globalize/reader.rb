@@ -61,7 +61,7 @@ module Txdb
             value = record[col.to_sym]
 
             unless value.to_s.strip.empty?
-              ret[col] = value
+              ret[col.to_s] = value
             end
           end
         end
@@ -73,7 +73,7 @@ module Txdb
           last_id = nil
 
           loop do
-            records = table.db
+            records = table.connection
               .from(origin_table_name(table.name))
               .where { id >= counter }
               .order(:id)
