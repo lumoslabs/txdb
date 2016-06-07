@@ -26,7 +26,7 @@ module Txdb
 
         def database
           @database ||= Txdb::Config.databases.find do |database|
-            database.database == request.params['database']
+            database.name == request.params['database']
           end
         end
 

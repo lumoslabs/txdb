@@ -7,7 +7,7 @@ describe ConnectionString do
     let(:options) do
       {
         username: 'janeway', password: 'borgsuck',
-        host: 'voyager', port: 3306, database: 'stellar_cartography'
+        host: 'voyager', port: 3306, name: 'stellar_cartography'
       }
     end
 

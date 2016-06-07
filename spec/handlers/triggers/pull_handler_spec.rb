@@ -29,7 +29,7 @@ describe PullHandler, test_config: true do
   end
 
   let(:params) do
-    { 'database' => database.database, 'table' => table.name }
+    { 'database' => database.name, 'table' => table.name }
   end
 
   it 'downloads the table for each locale' do
