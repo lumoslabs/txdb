@@ -6,7 +6,7 @@ module Txdb
     DEFAULT_PORT = '3306'
     DEFAULT_POOL = 10
 
-    attr_reader :adapter, :backend, :username, :password, :host, :port, :database
+    attr_reader :adapter, :backend, :username, :password, :host, :port, :name
     attr_reader :pool, :transifex_project, :tables, :connection_string
 
     def initialize(options = {})
@@ -16,7 +16,7 @@ module Txdb
       @password = options.fetch(:password)
       @host = options.fetch(:host, DEFAULT_HOST)
       @port = options.fetch(:port, DEFAULT_PORT)
-      @database = options.fetch(:database)
+      @name = options.fetch(:name)
       @pool = options.fetch(:pool, DEFAULT_POOL)
       @transifex_project = TransifexProject.new(options.fetch(:transifex))
       @connection_string = ConnectionString.new(options).string

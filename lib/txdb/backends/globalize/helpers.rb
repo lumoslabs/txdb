@@ -12,7 +12,7 @@ module Txdb
         end
 
         def resource_slug_for(table)
-          Txgh::Utils.slugify("#{table.database.database}-#{table.name}")
+          Txgh::Utils.slugify("#{table.database.name}-#{table.name}")
         end
       end
 

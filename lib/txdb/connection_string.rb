@@ -1,8 +1,8 @@
 module Txdb
   class ConnectionString
     TEMPLATES = {
-      mysql2: "%{adapter}://%{username}:%{password}@%{host}:%{port}/%{database}",
-      sqlite: "%{adapter}://%{database}"
+      mysql2: "%{adapter}://%{username}:%{password}@%{host}:%{port}/%{name}",
+      sqlite: "%{adapter}://%{name}"
     }
 
     attr_reader :options

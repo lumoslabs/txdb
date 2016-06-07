@@ -62,7 +62,7 @@ module Txdb
           backend: 'test-backend',
           username: 'username',
           password: 'password',
-          database: 'spec/test.sqlite3',
+          name: 'spec/test.sqlite3',
           transifex: {
             organization: 'myorg',
             project_slug: 'myproject',
