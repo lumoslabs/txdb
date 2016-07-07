@@ -1,3 +1,6 @@
+== 2.1.0
+* Exposing record selection logic to iterator subclasses.
+
 == 2.0.0
 * Renaming Database#database to Database#name.
 
