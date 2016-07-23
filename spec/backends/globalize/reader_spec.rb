@@ -11,6 +11,9 @@ describe Globalize::Reader, globalize_config: true do
     it 'reads data from the given table and returns an array of resources' do
       sprocket_id = widgets.connection.insert(name: 'sprocket')
       flange_id = widgets.connection.insert(name: 'flange')
+
+      widget_translations.connection.insert(widget_id: sprocket_id, locale: 'en', name: 'sprocket')
+      widget_translations.connection.insert(widget_id: flange_id, locale: 'en', name: 'flange')
       widget_translations.connection.insert(widget_id: sprocket_id, locale: 'es', name: 'sproqueta')
       widget_translations.connection.insert(widget_id: flange_id, locale: 'es', name: 'flango')
 
@@ -27,9 +30,9 @@ describe Globalize::Reader, globalize_config: true do
 
       expect(resource.content).to eq(
         YAML.dump(
-          'widgets' => {
-            1 => { 'name' => 'sprocket' },
-            2 => { 'name' => 'flange' }
+          'widget_translations' => {
+            sprocket_id => { 'name' => 'sprocket' },
+            flange_id => { 'name' => 'flange' }
           }
         )
       )

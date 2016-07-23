@@ -15,23 +15,23 @@ module Txdb
 
         def write_content(resource, locale)
           content = deserialize_content(resource.content)
-          content = content.fetch(origin_table_name(table.name), {})
+          content = content.fetch(table.name, {})
 
-          content.each_pair do |id, fields|
-            update_row(id, fields, locale)
+          content.each_pair do |foreign_id, fields|
+            update_row(foreign_id, fields, locale)
           end
         end
 
         private
 
-        def update_row(id, fields, locale)
+        def update_row(foreign_id, fields, locale)
           row = table.connection.where(
-            foreign_key.to_sym => id, locale: locale
+            origin_column => foreign_id, locale: locale
           )
 
           if row.empty?
             table.connection << fields
-              .merge(foreign_key.to_sym => id, locale: locale)
+              .merge(origin_column => foreign_id, locale: locale)
               .merge(created_at)
               .merge(updated_at)
           else
@@ -57,8 +57,8 @@ module Txdb
           YAML.load(content)
         end
 
-        def foreign_key
-          @foreign_key ||= table.name.sub(/_translations/, '_id')
+        def origin_column
+          origin_column_name(table.name)
         end
       end
 

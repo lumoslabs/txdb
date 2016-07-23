@@ -47,12 +47,12 @@ module Txdb
         end
 
         def content
-          @content ||= { origin_table_name(table.name) => content_for_records }
+          @content ||= { table.name => content_for_records }
         end
 
         def content_for_records
           iterator.each_with_object({}) do |record, ret|
-            ret[record[:id]] = content_for_record(record)
+            ret[record[origin_column]] = content_for_record(record)
           end
         end
 
@@ -64,6 +64,10 @@ module Txdb
               ret[col.to_s] = value
             end
           end
+        end
+
+        def origin_column
+          origin_column_name(table.name)
         end
 
         def iterator
