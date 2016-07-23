@@ -17,21 +17,21 @@ module Txdb
           content = deserialize_content(resource.content)
           content = content.fetch(table.name, {})
 
-          content.each_pair do |foreign_id, fields|
-            update_row(foreign_id, fields, locale)
+          content.each_pair do |parent_id, fields|
+            update_row(parent_id, fields, locale)
           end
         end
 
         private
 
-        def update_row(foreign_id, fields, locale)
+        def update_row(parent_id, fields, locale)
           row = table.connection.where(
-            origin_column => foreign_id, locale: locale
+            origin_column => parent_id, locale: locale
           )
 
           if row.empty?
             table.connection << fields
-              .merge(origin_column => foreign_id, locale: locale)
+              .merge(origin_column => parent_id, locale: locale)
               .merge(created_at)
               .merge(updated_at)
           else
