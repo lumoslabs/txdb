@@ -22,10 +22,15 @@ describe Globalize::Writer, globalize_config: true do
     context 'with some content' do
       before(:each) do
         @sprocket_id = widgets.connection.insert(name: 'sprocket')
+
+        sprocket_en_id = widget_translations.connection.insert(
+          widget_id: @sprocket_id, name: 'sprocket', locale: 'en'
+        )
+
         @writer = Globalize::Writer.new(widget_translations)
 
         @content = YAML.dump(
-          'widgets' => {
+          'widget_translations' => {
             @sprocket_id => { name: 'sproqueta' }
           }
         )
@@ -35,10 +40,10 @@ describe Globalize::Writer, globalize_config: true do
 
       it 'inserts the translations into the database' do
         expect { @writer.write_content(@resource, 'es') }.to(
-          change { widget_translations.connection.count }.from(0).to(1)
+          change { widget_translations.connection.count }.from(1).to(2)
         )
 
-        translation = widget_translations.connection.first
+        translation = widget_translations.connection.order(:id).last
 
         expect(translation).to include(
           widget_id: @sprocket_id, name: 'sproqueta', locale: 'es'
@@ -56,7 +61,7 @@ describe Globalize::Writer, globalize_config: true do
         it 'fills in the created_at and updated_at columns' do
           Timecop.freeze(Time.now) do
             @writer.write_content(@resource, 'es')
-            translation = widget_translations.connection.first
+            translation = widget_translations.connection.order(:id).last
             expect(translation[:created_at].to_i).to eq(Time.now.utc.to_i)
             expect(translation[:updated_at].to_i).to eq(Time.now.utc.to_i)
           end
@@ -73,7 +78,7 @@ describe Globalize::Writer, globalize_config: true do
 
             # record already exists, so should get updated with new timestamp
             @writer.write_content(@resource, 'es')
-            translation = widget_translations.connection.first
+            translation = widget_translations.connection.order(:id).last
             expect(translation[:updated_at].to_i).to eq(today.utc.to_i)
           end
         end
@@ -82,14 +87,19 @@ describe Globalize::Writer, globalize_config: true do
 
     it 'updates the record if it already exists' do
       sprocket_id = widgets.connection.insert(name: 'sprocket')
-      sprocket_trans_id = widget_translations.connection.insert(
+
+      sprocket_en_id = widget_translations.connection.insert(
+        widget_id: sprocket_id, locale: 'en', name: 'sprocket'
+      )
+
+      sprocket_es_id = widget_translations.connection.insert(
         widget_id: sprocket_id, locale: 'es', name: 'sproqueta'
       )
 
       writer = Globalize::Writer.new(widget_translations)
 
       content = YAML.dump(
-        'widgets' => {
+        'widget_translations' => {
           sprocket_id => { name: 'sproqueta2' }
         }
       )
@@ -100,7 +110,7 @@ describe Globalize::Writer, globalize_config: true do
         change { widget_translations.connection.count }
       )
 
-      translation = widget_translations.connection.where(id: sprocket_trans_id).first
+      translation = widget_translations.connection.where(id: sprocket_es_id).first
       expect(translation).to include(name: 'sproqueta2')
     end
   end

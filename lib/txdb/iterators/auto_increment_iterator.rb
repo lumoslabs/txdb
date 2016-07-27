@@ -29,7 +29,7 @@ module Txdb
             last_value = record[column]
           end
 
-          counter = last_value + 1
+          counter = last_value + 1 if last_value
         end
       end
 
@@ -48,12 +48,13 @@ module Txdb
       private
 
       def records_since(counter)
-        sql_column = Sequel.expr(column)
+        sql_column = Sequel.qualify(table_name, column)
 
         table.connection
+          .select_all(table_name)
           .from(table_name)
           .where { sql_column >= counter }
-          .order(column)
+          .order(sql_column)
           .limit(batch_size)
       end
 

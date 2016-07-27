@@ -5,8 +5,22 @@ module Txdb
 
       include Backends::Globalize::Helpers
 
-      def table_name
-        origin_table_name(table.name)
+      def records_since(counter)
+        super
+          .join(origin_table, column => origin_column)
+          .where(locale_column => table.source_lang)
+      end
+
+      def locale_column
+        Sequel.qualify(table_name, :locale)
+      end
+
+      def origin_column
+        Sequel.qualify(table_name, origin_column_name(table_name))
+      end
+
+      def origin_table
+        Sequel.expr(origin_table_name(table_name))
       end
     end
   end

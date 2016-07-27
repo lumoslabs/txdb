@@ -13,6 +13,7 @@ describe GlobalizeIterator, test_config: true do
 
       create_table(:team_translations) do
         primary_key :id
+        integer :team_id
         string :name, translate: true
         string :locale
         source_lang 'en'
@@ -30,8 +31,10 @@ describe GlobalizeIterator, test_config: true do
 
   it 'iterates over the items in the parent table' do
     teams.each do |team|
-      teams_table.connection << { name: team }
-      team_translations_table.connection << { name: "#{team}-es", locale: 'es' }
+      team_id = teams_table.connection.insert(name: team)
+      team_translations_table.connection.insert(
+        name: team, team_id: team_id, locale: 'en'
+      )
     end
 
     entries = iterator.map { |entry| entry[:name] }
