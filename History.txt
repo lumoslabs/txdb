@@ -1,3 +1,7 @@
+== 3.0.0
+* Globalize backend now uses translation entries in the source language
+  instead of columns from from the parent table.
+
 == 2.1.0
 * Exposing record selection logic to iterator subclasses.
 
