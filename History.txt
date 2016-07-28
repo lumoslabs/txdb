@@ -1,3 +1,6 @@
+== 3.1.0
+* Skip source language when downloading.
+
 == 3.0.0
 * Globalize backend now uses translation entries in the source language
   instead of columns from from the parent table.
