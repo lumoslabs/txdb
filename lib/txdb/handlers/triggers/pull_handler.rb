@@ -5,7 +5,7 @@ module Txdb
       class PullHandler < Handler
         def handle
           handle_safely do
-            locales.each do |locale|
+            database.locales.each do |locale|
               downloader.download_table(table, locale)
             end
 
@@ -17,12 +17,6 @@ module Txdb
 
         def downloader
           @downloader ||= Downloader.new(database)
-        end
-
-        def locales
-          database.transifex_api
-            .get_languages(database.transifex_project.project_slug)
-            .map { |locale| locale['language_code'] }
         end
       end
 

@@ -9,7 +9,6 @@ describe AutoIncrementIterator, test_config: true do
       create_table(:teams) do
         primary_key :id
         string :name, translate: true
-        source_lang 'en'
       end
     end
   end

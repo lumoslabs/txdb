@@ -8,7 +8,7 @@ module Txdb
       def records_since(counter)
         super
           .join(origin_table, column => origin_column)
-          .where(locale_column => table.source_lang)
+          .where(locale_column => table.database.source_locale)
       end
 
       def locale_column

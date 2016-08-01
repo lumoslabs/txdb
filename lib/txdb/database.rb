@@ -8,6 +8,7 @@ module Txdb
 
     attr_reader :adapter, :backend, :username, :password, :host, :port, :name
     attr_reader :pool, :transifex_project, :tables, :connection_string
+    attr_reader :locales, :source_locale
 
     def initialize(options = {})
       @adapter = options.fetch(:adapter)
@@ -18,6 +19,8 @@ module Txdb
       @port = options.fetch(:port, DEFAULT_PORT)
       @name = options.fetch(:name)
       @pool = options.fetch(:pool, DEFAULT_POOL)
+      @locales = options.fetch(:locales)
+      @source_locale = options.fetch(:source_locale)
       @transifex_project = TransifexProject.new(options.fetch(:transifex))
       @connection_string = ConnectionString.new(options).string
       @tables = options.fetch(:tables).map do |table_config|

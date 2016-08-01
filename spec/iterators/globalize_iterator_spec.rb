@@ -16,7 +16,6 @@ describe GlobalizeIterator, test_config: true do
         integer :team_id
         string :name, translate: true
         string :locale
-        source_lang 'en'
       end
     end
   end

@@ -17,7 +17,6 @@ module Txdb
             integer :widget_id
             string :locale
             string :name, translate: true
-            source_lang 'en'
           end
 
           block.call if block

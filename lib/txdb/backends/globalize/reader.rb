@@ -22,7 +22,7 @@ module Txdb
         def resource
           @resource ||= Txgh::TxResource.new(
             project_slug, resource_slug, Globalize::Backend::RESOURCE_TYPE,
-            source_lang, source_file, nil, nil
+            source_locale, source_file, nil, nil
           )
         end
 
@@ -34,8 +34,8 @@ module Txdb
           resource_slug_for(table)
         end
 
-        def source_lang
-          table.source_lang
+        def source_locale
+          table.database.source_locale
         end
 
         def source_file
