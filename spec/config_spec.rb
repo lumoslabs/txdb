@@ -16,7 +16,6 @@ describe Txdb::Config do
         Txdb::TestConfigurator.base_config.tap do |base_config|
           base_config[:tables] << {
             name: 'my_table',
-            source_lang: 'en',
             columns: []
           }
         end
@@ -69,9 +68,9 @@ describe Txdb::Config do
       # method loops over more than one db, yielding tables from each
       config[:databases] << config[:databases].first.merge(
         database: 'spec/test2.sqlite3',
+        source_locale: 'en',
         tables: [
           name: 'another_table',
-          source_lang: 'en',
           columns: %w(col1 col2)
         ]
       )

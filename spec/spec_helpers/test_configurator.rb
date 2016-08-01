@@ -63,6 +63,8 @@ module Txdb
           username: 'username',
           password: 'password',
           name: 'spec/test.sqlite3',
+          locales: %w(es ja),
+          source_locale: 'en',
           transifex: {
             organization: 'myorg',
             project_slug: 'myproject',
@@ -95,7 +97,7 @@ module Txdb
   end
 
   class TableCreator
-    attr_reader :name, :database, :columns, :source_lang
+    attr_reader :name, :database, :columns
 
     def initialize(name, database, &block)
       @name = name
@@ -117,14 +119,10 @@ module Txdb
       add_column(column, :integer, *args)
     end
 
-    def source_lang(lang)
-      @source_lang = lang
-    end
-
     def table
       Txdb::Table.new(
         database, {
-          name: name.to_s, columns: columns, source_lang: @source_lang
+          name: name.to_s, columns: columns
         }
       )
     end

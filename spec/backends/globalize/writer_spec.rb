@@ -11,11 +11,11 @@ describe Globalize::Writer, globalize_config: true do
 
   describe '#write_content' do
     let(:base_resource) do
-      # project_slug, resource_slug, type, source_lang, source_file,
+      # project_slug, resource_slug, type, source_locale, source_file,
       # lang_map, translation_file
       Txgh::TxResource.new(
         'project_slug', 'resource_slug', Globalize::Backend::RESOURCE_TYPE,
-        'source_lang', 'source_file', nil, nil
+        'source_locale', 'source_file', nil, nil
       )
     end
 

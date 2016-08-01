@@ -20,8 +20,8 @@ module Txdb
 
     def download_all
       database.tables.each do |table|
-        locales.each do |locale|
-          next if locale == table.source_lang
+        database.locales.each do |locale|
+          next if locale == database.source_locale
           download_table(table, locale)
         end
       end
@@ -66,12 +66,6 @@ module Txdb
         .map do |resource_hash|
           Txgh::TxResource.from_api_response(project_slug, resource_hash)
         end
-    end
-
-    def locales
-      @locales ||= database.transifex_api
-        .get_languages(database.transifex_project.project_slug)
-        .map { |locale| locale['language_code'] }
     end
   end
 end

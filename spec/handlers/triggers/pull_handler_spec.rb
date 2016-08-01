@@ -33,17 +33,15 @@ describe PullHandler, test_config: true do
   end
 
   it 'downloads the table for each locale' do
-    locales = [{ 'language_code' => 'es' }, { 'language_code' => 'ja' }]
     content = { 'phrase' => 'trans' }
 
-    expect(database.transifex_api).to receive(:get_languages).and_return(locales)
     allow(database.transifex_api).to receive(:download).and_return(YAML.dump(content))
     expect(database.transifex_api).to receive(:get_resources).and_return(
       [Txdb::TestBackend.resource.to_api_h]
     )
 
     expect { patch('/pull', params) }.to(
-      change { Txdb::TestBackend.writes.size }.from(0).to(2)
+      change { Txdb::TestBackend.writes.size }.from(0).to(2)  # ja and es
     )
 
     expect(last_response.status).to eq(200)
@@ -66,7 +64,7 @@ describe PullHandler, test_config: true do
   end
 
   it 'reports errors' do
-    expect(database.transifex_api).to receive(:get_languages).and_raise('jelly beans')
+    expect(database).to receive(:locales).and_raise('jelly beans')
     patch '/pull', params
     expect(last_response.status).to eq(500)
     expect(JSON.parse(last_response.body)).to eq(
