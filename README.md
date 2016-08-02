@@ -80,6 +80,35 @@ Txdb::Backends.register(
 )
 ```
 
+Usage
+---
+
+Txdb contains a number of HTTP endpoints for triggering uploads and downloads to and from Transifex. However, they're largely untested as of this writing. We suggest you write small scripts instead. The endpoints may be improved later, but right now it's not a priority.
+
+### Downloading
+
+```ruby
+require 'txdb'
+
+Txdb::Config.databases.each do |database|
+  Txdb::Downloader.download_all(database)
+end
+```
+
+When running this script, make sure you set the `TXDB_CONFIG` environment variable.
+
+### Uploading
+
+```ruby
+require 'txdb'
+
+Txdb::Config.databases.each do |database|
+  Txdb::Uploader.upload(database)
+end
+```
+
+When running this script, make sure you set the `TXDB_CONFIG` environment variable.
+
 Running Tests
 ---
 
