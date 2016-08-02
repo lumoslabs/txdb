@@ -40,7 +40,7 @@ databases:
     - description
 ```
 
-The root of the config hierarchy is an array of databases. Each one specifies how to connect to a specific database, which backend to use (see below) what Transifex project it's associated with, and which tables and columns to sync. Txdb will upload a new resource for each table.
+The root of the config hierarchy is an array of databases. Each one specifies how to connect to a specific database, which backend to use (see below), what Transifex project it's associated with, and which tables and columns to sync. Txdb will upload a new resource for each table.
 
 ### Using Configuration
 
