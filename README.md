@@ -5,7 +5,8 @@ Txdb
 
 Txdb, a mashup of "Transifex" and "database", is an automation tool that facilitates translating database content with Transifex, a popular translation management system.
 
-### Configuration
+Configuration
+---
 
 Configuration is done in the YAML file format. Here's an example:
 
@@ -40,7 +41,7 @@ databases:
     - description
 ```
 
-The root of the config hierarchy is an array of databases. Each one specifies how to connect to a specific database, which backend to use (see below) what Transifex project it's associated with, and which tables and columns to sync. Txdb will upload a new resource for each table.
+The root of the config hierarchy is an array of databases. Each one specifies how to connect to a specific database, which backend to use (see below), what Transifex project it's associated with, and which tables and columns to sync. Txdb will upload a new resource for each table.
 
 ### Using Configuration
 
@@ -68,7 +69,8 @@ When Txdb runs, it will read and parse the file at the path that comes after `fi
 
 Of course, in both the file and the raw cases, environment variables can be specified via `export` or inline when starting Txdb.
 
-### Backends
+Backends
+---
 
 Backends provide different strategies for syncing content between Transifex and your database. They are made up of a reader and a writer. Currently the only supported backend is the Globalize backend, which understands the database translation strategy used by the [Globalize](https://github.com/globalize/globalize) gem. Adding additional backends is straightforward. Use the Globalize backend as a model to create the reader, writer, and backend classes, then register your new backend:
 
@@ -77,6 +79,35 @@ Txdb::Backends.register(
   'my-cool-backend', MyModule::MyBackendClass
 )
 ```
+
+Usage
+---
+
+Txdb contains a number of HTTP endpoints for triggering uploads and downloads to and from Transifex. However, they're largely untested as of this writing. We suggest you write small scripts instead. The endpoints may be improved later, but right now it's not a priority.
+
+### Downloading
+
+```ruby
+require 'txdb'
+
+Txdb::Config.databases.each do |database|
+  Txdb::Downloader.download_all(database)
+end
+```
+
+When running this script, make sure you set the `TXDB_CONFIG` environment variable.
+
+### Uploading
+
+```ruby
+require 'txdb'
+
+Txdb::Config.databases.each do |database|
+  Txdb::Uploader.upload(database)
+end
+```
+
+When running this script, make sure you set the `TXDB_CONFIG` environment variable.
 
 Running Tests
 ---
