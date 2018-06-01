@@ -1,5 +1,17 @@
 sudo: false
 language: ruby
-rvm:
-  - 2.1.6
-script: 'bundle exec rspec'
+cache:
+  - bundler
+install: true # skip bundle install
+notifications:
+  email: false
+
+matrix:
+  include:
+    - env: TRAVIS_JOB=build
+      sudo: required
+      services: docker
+    - env: TRAVIS_JOB=test
+      rvm: 2.1.6
+
+script: bash ./script/travis.sh
