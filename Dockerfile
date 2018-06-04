@@ -1,4 +1,4 @@
-FROM ruby:2.3
+FROM ruby:2.5
 
 EXPOSE 9292
 
@@ -13,4 +13,4 @@ RUN bundle install --jobs=3 --retry=3 --without development test
 
 COPY . /usr/src/app
 
-CMD ["puma", "-p", "9292"]
+CMD ["bundle", "exec", "puma", "-p", "9292"]
