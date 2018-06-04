@@ -1,6 +1,8 @@
 require 'spec_helper'
 require 'spec_helpers/test_backend'
 require 'spec_helpers/test_configurator'
+
+require 'txgh-server'
 require 'uri'
 require 'yaml'
 
@@ -52,9 +54,20 @@ describe HookHandler, test_config: true do
     let(:content) { { 'phrase' => 'trans' } }
 
     before(:each) do
+      date_str = Time.now.strftime('%a, %d %b %Y %H:%M:%S GMT')
+
+      header('Date', date_str)
+      header('X-Tx-Url', 'http://example.org/transifex')
+
       header(
-        Txgh::TransifexRequestAuth::TRANSIFEX_HEADER,
-        Txgh::TransifexRequestAuth.header_value(body, project.webhook_secret)
+        TxghServer::TransifexRequestAuth::TRANSIFEX_HEADER,
+        TxghServer::TransifexRequestAuth.compute_signature(
+          http_verb: 'POST',
+          url: 'http://example.org/transifex',
+          date_str: date_str,
+          content: body,
+          secret: project.webhook_secret
+        )
       )
     end
 

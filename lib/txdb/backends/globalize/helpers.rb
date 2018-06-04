@@ -16,7 +16,7 @@ module Txdb
         end
 
         def resource_slug_for(table)
-          Txgh::Utils.slugify("#{table.database.name}-#{table.name}")
+          Txdb::Utils.slugify("#{table.database.name}-#{table.name}")
         end
 
         private

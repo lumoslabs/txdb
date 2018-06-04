@@ -1,4 +1,5 @@
 require 'txgh'
+require 'txgh-server'
 require 'uri'
 
 module Txdb
@@ -55,7 +56,7 @@ module Txdb
       end
 
       def authentic_request?
-        Txgh::TransifexRequestAuth.authentic_request?(
+        TxghServer::TransifexRequestAuth.authentic_request?(
           request, transifex_project.webhook_secret
         )
       end

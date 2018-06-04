@@ -17,6 +17,7 @@ module Txdb
   autoload :Triggers,         'txdb/app'
   autoload :TxResource,       'txdb/tx_resource'
   autoload :Uploader,         'txdb/uploader'
+  autoload :Utils,            'txdb/utils'
 
   DEFAULT_ENV = 'development'
 

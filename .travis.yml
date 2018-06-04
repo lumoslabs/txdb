@@ -12,6 +12,6 @@ matrix:
       sudo: required
       services: docker
     - env: TRAVIS_JOB=test
-      rvm: 2.1.6
+      rvm: 2.5.1
 
 script: bash ./script/travis.sh
