@@ -2,7 +2,7 @@ source 'http://rubygems.org'
 
 gemspec
 
-gem 'puma', '~> 2.15'
+gem 'puma', '~> 3.11'
 
 group :development do
   gem 'dotenv'
