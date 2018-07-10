@@ -1,3 +1,6 @@
+== 4.1.1
+* Use YAML_GENERIC file format instead of YML (which changed recently, thanks Transifex).
+
 == 4.1.0
 * Loosen dependency on txgh.
 

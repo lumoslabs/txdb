@@ -3,7 +3,7 @@ module Txdb
     module Globalize
 
       class Backend
-        RESOURCE_TYPE = 'YML'
+        RESOURCE_TYPE = 'YAML_GENERIC'
 
         class << self
           def read_content_from(table)
