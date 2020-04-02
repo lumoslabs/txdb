@@ -1,3 +1,6 @@
+# 4.2.1
+* Update txgh to v7.0.0 and txgh-server to v4.0.0
+
 # 4.2.0
 * Support ERB tags in config files.
 

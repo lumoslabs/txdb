@@ -17,8 +17,8 @@ Gem::Specification.new do |s|
   s.add_dependency 'sequel', '~> 4.0'
   s.add_dependency 'sinatra', '~> 1.4'
   s.add_dependency 'sinatra-contrib', '~> 1.4'
-  s.add_dependency 'txgh', '>= 2.0'
-  s.add_dependency 'txgh-server', '~> 3.0'
+  s.add_dependency 'txgh', '~> 7.0'
+  s.add_dependency 'txgh-server', '~> 4.0'
 
   s.require_path = 'lib'
   s.files = Dir['{lib,spec}/**/*', 'README.md', 'txdb.gemspec', 'LICENSE']
